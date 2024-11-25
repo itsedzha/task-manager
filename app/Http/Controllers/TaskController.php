@@ -11,8 +11,10 @@ class TaskController extends Controller
      */
     public function index()
     {
-        return view('tasks.index');
+        $tasks = \App\Models\Task::all(); // Fetch all tasks
+        return view('tasks.index', compact('tasks')); // Pass tasks to the view
     }
+    
     
     /**
      * Show the form for creating a new resource.
