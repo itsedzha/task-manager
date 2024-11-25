@@ -21,16 +21,27 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
+        return view('tasks.create');
     }
+    
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'priority' => 'required|in:low,medium,high',
+            'deadline' => 'nullable|date',
+        ]);
+    
+        \App\Models\Task::create($validated);
+    
+        return redirect()->route('tasks.index')->with('success', 'Task created successfully!');
     }
+    
 
     /**
      * Display the specified resource.
