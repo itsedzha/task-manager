@@ -9,11 +9,22 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $tasks = \App\Models\Task::all(); // Fetch all tasks
-        return view('tasks.index', compact('tasks')); // Pass tasks to the view
+        $query = \App\Models\Task::query();
+    
+        if ($request->has('search')) {
+            $query->where('title', 'like', '%' . $request->input('search') . '%')
+                  ->orWhere('priority', 'like', '%' . $request->input('search') . '%');
+        }
+    
+        $tasks = $query->paginate(10);
+    
+        return view('tasks.index', compact('tasks'));
     }
+    
+    
+    
     
     
     /**
