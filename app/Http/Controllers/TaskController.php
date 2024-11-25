@@ -24,8 +24,12 @@ class TaskController extends Controller
         $completedTasks = \App\Models\Task::where('completed', true)->count();
         $upcomingDeadlines = \App\Models\Task::where('deadline', '>=', now())->count();
     
-        return view('tasks.index', compact('tasks', 'totalTasks', 'completedTasks', 'upcomingDeadlines'));
+        // task progresa formula
+        $progress = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
+    
+        return view('tasks.index', compact('tasks', 'totalTasks', 'completedTasks', 'upcomingDeadlines', 'progress'));
     }
+    
 
     
     

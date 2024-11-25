@@ -106,21 +106,30 @@
         </div>
     @endif
 
-    <!-- Dashboard Summary -->
     <div class="dashboard">
-        <div class="card">
-            <h2>{{ $totalTasks }}</h2>
-            <p>Total Tasks</p>
-        </div>
-        <div class="card">
-            <h2>{{ $completedTasks }}</h2>
-            <p>Completed Tasks</p>
-        </div>
-        <div class="card">
-            <h2>{{ $upcomingDeadlines }}</h2>
-            <p>Upcoming Deadlines</p>
-        </div>
+    <div class="card">
+        <h2>{{ $totalTasks }}</h2>
+        <p>Total Tasks</p>
     </div>
+    <div class="card">
+        <h2>{{ $completedTasks }}</h2>
+        <p>Completed Tasks</p>
+    </div>
+    <div class="card">
+        <h2>{{ $upcomingDeadlines }}</h2>
+        <p>Upcoming Deadlines</p>
+    </div>
+</div>
+
+<!-- Progress Bar -->
+<div style="margin-top: 20px;">
+    <h2>Task Progress</h2>
+    <div style="background-color: #ddd; border-radius: 10px; overflow: hidden; width: 100%; height: 20px;">
+        <div style="width: {{ $progress }}%; background-color: #007BFF; height: 100%;"></div>
+    </div>
+    <p>{{ $progress }}% of tasks completed</p>
+</div>
+
 
     <!-- Search Bar -->
     <div class="search-bar">
