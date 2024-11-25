@@ -2,10 +2,6 @@
 <html>
 <head>
     <title>Task Manager</title>
-    @if (session('success'))
-    <p style="color: green;">{{ session('success') }}</p>
-@endif
-
     <style>
         table {
             width: 100%;
@@ -43,13 +39,14 @@
                     <td>{{ $task->completed ? 'Yes' : 'No' }}</td>
                     <td>{{ $task->deadline }}</td>
                     <td>
-                        <a href="{{ route('tasks.edit', $task->id) }}">Edit</a> |
-                        <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit">Delete</button>
-                        </form>
-                    </td>
+    <a href="{{ route('tasks.edit', $task->id) }}">Edit</a> |
+    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
+        @csrf
+        @method('DELETE')
+        <button type="submit" onclick="return confirm('Are you sure you want to delete this task?')">Delete</button>
+    </form>
+</td>
+
                 </tr>
             @endforeach
         </tbody>
