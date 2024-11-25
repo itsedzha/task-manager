@@ -18,6 +18,28 @@
         a:hover {
             text-decoration: underline;
         }
+        .dashboard {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .card {
+            flex: 1;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .card h2 {
+            font-size: 2rem;
+            margin: 0;
+            color: #007BFF;
+        }
+        .card p {
+            margin: 10px 0 0;
+            color: #555;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -83,6 +105,22 @@
             {{ session('success') }}
         </div>
     @endif
+
+    <!-- Dashboard Summary -->
+    <div class="dashboard">
+        <div class="card">
+            <h2>{{ $totalTasks }}</h2>
+            <p>Total Tasks</p>
+        </div>
+        <div class="card">
+            <h2>{{ $completedTasks }}</h2>
+            <p>Completed Tasks</p>
+        </div>
+        <div class="card">
+            <h2>{{ $upcomingDeadlines }}</h2>
+            <p>Upcoming Deadlines</p>
+        </div>
+    </div>
 
     <!-- Search Bar -->
     <div class="search-bar">

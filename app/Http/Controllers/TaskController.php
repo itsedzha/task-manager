@@ -20,11 +20,13 @@ class TaskController extends Controller
     
         $tasks = $query->paginate(10);
     
-        return view('tasks.index', compact('tasks'));
+        $totalTasks = \App\Models\Task::count();
+        $completedTasks = \App\Models\Task::where('completed', true)->count();
+        $upcomingDeadlines = \App\Models\Task::where('deadline', '>=', now())->count();
+    
+        return view('tasks.index', compact('tasks', 'totalTasks', 'completedTasks', 'upcomingDeadlines'));
     }
-    
-    
-    
+
     
     
     /**
