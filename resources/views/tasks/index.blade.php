@@ -55,6 +55,10 @@
         th {
             background-color: #f4f4f4;
         }
+        td.upcoming-deadline {
+            color: red;
+            font-weight: bold;
+        }
         button {
             padding: 5px 10px;
             color: white;
@@ -106,30 +110,30 @@
         </div>
     @endif
 
+    <!-- Dashboard Summary -->
     <div class="dashboard">
-    <div class="card">
-        <h2>{{ $totalTasks }}</h2>
-        <p>Total Tasks</p>
+        <div class="card">
+            <h2>{{ $totalTasks }}</h2>
+            <p>Total Tasks</p>
+        </div>
+        <div class="card">
+            <h2>{{ $completedTasks }}</h2>
+            <p>Completed Tasks</p>
+        </div>
+        <div class="card">
+            <h2>{{ $upcomingDeadlines }}</h2>
+            <p>Upcoming Deadlines</p>
+        </div>
     </div>
-    <div class="card">
-        <h2>{{ $completedTasks }}</h2>
-        <p>Completed Tasks</p>
-    </div>
-    <div class="card">
-        <h2>{{ $upcomingDeadlines }}</h2>
-        <p>Upcoming Deadlines</p>
-    </div>
-</div>
 
-<!-- Progress Bar -->
-<div style="margin-top: 20px;">
-    <h2>Task Progress</h2>
-    <div style="background-color: #ddd; border-radius: 10px; overflow: hidden; width: 100%; height: 20px;">
-        <div style="width: {{ $progress }}%; background-color: #007BFF; height: 100%;"></div>
+    <!-- Progress Bar -->
+    <div style="margin-top: 20px;">
+        <h2>Task Progress</h2>
+        <div style="background-color: #ddd; border-radius: 10px; overflow: hidden; width: 100%; height: 20px;">
+            <div style="width: {{ $progress }}%; background-color: #007BFF; height: 100%;"></div>
+        </div>
+        <p>{{ $progress }}% of tasks completed</p>
     </div>
-    <p>{{ $progress }}% of tasks completed</p>
-</div>
-
 
     <!-- Search Bar -->
     <div class="search-bar">
@@ -160,7 +164,9 @@
                     <td>{{ $task->description }}</td>
                     <td>{{ ucfirst($task->priority) }}</td>
                     <td>{{ $task->completed ? 'Yes' : 'No' }}</td>
-                    <td>{{ $task->deadline }}</td>
+                    <td class="{{ $task->is_deadline_soon ? 'upcoming-deadline' : '' }}">
+                        {{ $task->deadline }}
+                    </td>
                     <td>
                         <a href="{{ route('tasks.edit', $task->id) }}">Edit</a> |
                         <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">

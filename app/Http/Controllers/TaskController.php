@@ -13,24 +13,33 @@ class TaskController extends Controller
     {
         $query = \App\Models\Task::query();
     
+        // meklesanas funkcionalitate
         if ($request->has('search')) {
             $query->where('title', 'like', '%' . $request->input('search') . '%')
                   ->orWhere('priority', 'like', '%' . $request->input('search') . '%');
         }
     
+        // pagination
         $tasks = $query->paginate(10);
     
+        // dashboard 
         $totalTasks = \App\Models\Task::count();
         $completedTasks = \App\Models\Task::where('completed', true)->count();
         $upcomingDeadlines = \App\Models\Task::where('deadline', '>=', now())->count();
     
-        // task progresa formula
+        // deadline hihglights
+        foreach ($tasks as $task) {
+            $task->is_deadline_soon = $task->deadline && $task->deadline->isBetween(now(), now()->addDays(3));
+        }
+    
+        // formula progresam
         $progress = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
     
         return view('tasks.index', compact('tasks', 'totalTasks', 'completedTasks', 'upcomingDeadlines', 'progress'));
     }
     
-
+    
+    
     
     
     /**
