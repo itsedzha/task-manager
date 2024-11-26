@@ -13,23 +13,18 @@ class Task extends Model
         'title',
         'description',
         'priority',
-        'due_date',
-        'is_completed',
-        'progress', 
+        'deadline', 
+        'completed',
+        'progress',
     ];
-    
 
-    
     protected $casts = [
-        'deadline' => 'datetime',
+        'deadline' => 'datetime', 
         'completed' => 'boolean',
     ];
 
-
-public function subtasks()
-{
-    return $this->hasMany(Subtask::class);
-}
-
-
+    public function subtasks()
+    {
+        return $this->hasMany(Subtask::class);
+    }
 }

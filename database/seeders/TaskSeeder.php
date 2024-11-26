@@ -38,10 +38,20 @@ class TaskSeeder extends Seeder
                 'description' => 'Write English essay',
                 'priority' => 'medium',
                 'completed' => true,
-                'deadline' => Carbon::now()->subDay(), // 1 day ago
+                'deadline' => Carbon::now()->subDay(), 
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
+            [
+                'title' => 'Task 4',
+                'description' => 'Read a book',
+                'priority' => 'medium',
+                'completed' => false,
+                'deadline' => null, 
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
+            ],
+            
         ]);
     }
 }
