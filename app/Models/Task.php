@@ -24,4 +24,10 @@ class Task extends Model
         'deadline' => 'datetime',
         'completed' => 'boolean',
     ];
+
+    public function subtasks()
+{
+    return $this->hasMany(Subtask::class);
+}
+
 }

@@ -3,39 +3,55 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth; // For user authentication
 use App\Models\Task;
 
 class TaskController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index(Request $request)
     {
-        $query = Task::query();
-
+        $query = \App\Models\Task::query();
+    
+        // s
         if ($request->has('search')) {
             $query->where('title', 'like', '%' . $request->input('search') . '%')
                   ->orWhere('priority', 'like', '%' . $request->input('search') . '%');
         }
-
-        $tasks = $query->where('user_id', Auth::id())->paginate(10); // Filter tasks by logged-in user
-
-        $totalTasks = $tasks->count();
-        $completedTasks = $tasks->where('progress', 100)->count();
-        $upcomingDeadlines = $tasks->where('deadline', '>=', now())->count();
-
-        $user = Auth::user(); // Get logged-in user
-        $totalPoints = $user->points; // Fetch user's points
-
+    
+        $tasks = $query->paginate(10);
+    
+        // Dashboard Metrics
+        $totalTasks = \App\Models\Task::count();
+        $completedTasks = \App\Models\Task::where('completed', true)->count();
+        $upcomingDeadlines = \App\Models\Task::where('deadline', '>=', now())->count();
+    
+        $totalPoints = $completedTasks * 10; // 10 punkti par katru uzdevumu
+    
+        // deadline highlight
+        foreach ($tasks as $task) {
+            $task->is_deadline_soon = $task->deadline && $task->deadline->between(now(), now()->addDays(3));
+        }
+    
+        // progresa formula
         $progress = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
-
+    
         return view('tasks.index', compact('tasks', 'totalTasks', 'completedTasks', 'upcomingDeadlines', 'progress', 'totalPoints'));
     }
+    
 
+    /**
+     * Show the form for creating a new resource.
+     */
     public function create()
     {
         return view('tasks.create');
     }
 
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -46,15 +62,34 @@ class TaskController extends Controller
             'progress' => 'nullable|integer|min:0|max:100',
         ]);
 
+        // Default progress to 0 if not provided
         $validated['progress'] = $validated['progress'] ?? 0;
-        $validated['points'] = 0;
-        $validated['user_id'] = Auth::id(); // Assign task to the logged-in user
 
         Task::create($validated);
 
-        return redirect()->route('tasks.index')->with('success', 'Uzdevums veiksmīgi izveidots!');
+        return redirect()->route('tasks.index')->with('success', 'Task created successfully!');
     }
 
+    /**
+     * Display the specified resource.
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit($id)
+    {
+        $task = Task::findOrFail($id);
+        return view('tasks.edit', compact('task'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
@@ -62,40 +97,24 @@ class TaskController extends Controller
             'description' => 'nullable|string',
             'priority' => 'required|in:low,medium,high',
             'deadline' => 'nullable|date',
-            'progress' => 'required|integer|min:0|max:100',
+            'progress' => 'nullable|integer|min:0|max:100',
         ]);
 
         $task = Task::findOrFail($id);
 
         $task->update($validated);
 
-        // Update points for the logged-in user
-        $user = Auth::user();
-        $points = $user->points;
-
-        if ($validated['progress'] == 100 && $task->progress < 100) {
-            $points += 10; // Add 10 points for completing the task
-
-            if ($task->priority === 'high') {
-                $points += 20; // Add 20 points for high-priority tasks
-            }
-
-            if ($task->deadline && now()->lessThanOrEqualTo($task->deadline)) {
-                $points += 5; // Add 5 points for meeting the deadline
-            }
-        }
-
-        $user->update(['points' => $points]); // Save the updated points
-
-        return redirect()->route('tasks.index')->with('success', 'Uzdevums veiksmīgi atjaunināts!');
+        return redirect()->route('tasks.index')->with('success', 'Task updated successfully!');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     */
     public function destroy($id)
     {
         $task = Task::findOrFail($id);
-
         $task->delete();
 
-        return redirect()->route('tasks.index')->with('success', 'Uzdevums veiksmīgi dzēsts!');
+        return redirect()->route('tasks.index')->with('success', 'Task deleted successfully!');
     }
 }
