@@ -43,7 +43,7 @@
         </div>
         @endif
 
-        <!-- Dashboard -->
+
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
             <div class="bg-white shadow rounded-lg p-6 text-center">
                 <img src="{{ asset('dashboard-icons/list-check.png') }}" alt="Total Tasks"
@@ -77,7 +77,6 @@
             </div>
         </div>
 
-        <!-- Rewards -->
         <div class="mt-12">
             <h2 class="text-2xl font-semibold text-gray-800">Rewards</h2>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
@@ -104,7 +103,7 @@
             </div>
         </div>
 
-        <!-- Tasks -->
+
         <div class="mt-12">
             <h2 class="text-2xl font-semibold text-gray-800">Your Tasks</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
@@ -113,34 +112,31 @@
                     <h3 class="text-lg font-semibold text-gray-800">{{ $task->title }}</h3>
                     <p class="text-gray-600 text-sm">{{ $task->description }}</p>
 
-                    <!-- Deadline -->
                     <div class="flex items-center text-sm text-gray-600 mt-2">
                         <span class="material-symbols-outlined text-gray-500 mr-1">calendar_month</span>
                         {{ $task->deadline ? $task->deadline->format('M d, Y') : 'No deadline' }}
                     </div>
 
-                    <!-- Subtasks -->
                     @if ($task->subtasks->count() > 0)
-                    <div class="mt-4">
-                        <h4 class="text-sm font-medium text-gray-700">Subtasks</h4>
-                        <div class="grid gap-2">
-                            @foreach ($task->subtasks as $subtask)
-                            <div class="flex items-center justify-between bg-gray-100 p-2 rounded">
-                                <span>{{ $subtask->title }}</span>
-                                <form action="{{ route('subtasks.destroy', $subtask->id) }}" method="POST">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="text-red-500 hover:text-red-700">
-                                        <span class="material-symbols-outlined">delete</span>
-                                    </button>
-                                </form>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    @endif
+<div class="mt-4">
+    <h4 class="text-sm font-medium text-gray-700">Subtasks</h4>
+    <div class="grid gap-2">
+        @foreach ($task->subtasks as $subtask)
+        <div class="flex items-center justify-between bg-gray-100 p-2 rounded">
+            <span>{{ $subtask->title }}</span>
+            <form action="{{ route('subtasks.destroy', $subtask->id) }}" method="POST">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="text-gray-500 hover:text-gray-700 text-lg font-bold">
+                    &#x2716;
+                </button>
+            </form>
+        </div>
+        @endforeach
+    </div>
+</div>
+@endif
 
-                    <!-- Points -->
                     <div class="flex items-center justify-between mt-4">
                         <span class="flex items-center">
                             <span class="material-symbols-outlined trophy-icon mr-1">emoji_events</span>
@@ -161,7 +157,6 @@
             </div>
         </div>
 
-        <!-- Add Task Button -->
         <div class="mt-8 text-right">
             <a href="{{ route('tasks.create') }}"
                 class="inline-block px-6 py-2 bg-purple-500 text-white rounded hover:bg-purple-600">
