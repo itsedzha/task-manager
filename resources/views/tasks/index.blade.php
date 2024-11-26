@@ -12,7 +12,7 @@
     <div class="container mx-auto py-6">
         <h1 class="text-3xl font-bold text-center text-gray-800">Task Manager</h1>
 
-        <!-- success -->
+        <!-- pazinojuma succ message -->
         @if (session('success'))
             <div class="bg-green-100 text-green-700 p-4 rounded mt-4">
                 {{ session('success') }}
@@ -20,22 +20,37 @@
         @endif
 
         <!-- dashboard -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
-            <div class="bg-white shadow rounded p-6 text-center">
-                <h2 class="text-4xl font-bold text-blue-500">{{ $totalTasks }}</h2>
-                <p class="text-gray-600">Total Tasks</p>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
+            <!-- total tasks-->
+            <div class="bg-white shadow rounded-lg p-6 text-center">
+                <img src="{{ asset('dashboard-icons/list-check.png') }}" alt="Total Tasks" class="w-12 h-12 mx-auto mb-4">
+                <h2 class="text-3xl font-bold text-blue-500">{{ $totalTasks }}</h2>
+                <p class="text-sm text-gray-600">Total Tasks<br><span class="text-gray-500">All tasks created</span></p>
             </div>
-            <div class="bg-white shadow rounded p-6 text-center">
-                <h2 class="text-4xl font-bold text-blue-500">{{ $completedTasks }}</h2>
-                <p class="text-gray-600">Completed Tasks</p>
+
+            <!-- completed tasks -->
+            <div class="bg-white shadow rounded-lg p-6 text-center">
+                <img src="{{ asset('dashboard-icons/check-circle.png') }}" alt="Completed Tasks" class="w-12 h-12 mx-auto mb-4">
+                <h2 class="text-3xl font-bold text-green-500">{{ $completedTasks }}</h2>
+                <p class="text-sm text-gray-600">Completed Tasks<br><span class="text-gray-500">Tasks finished</span></p>
             </div>
-            <div class="bg-white shadow rounded p-6 text-center">
-                <h2 class="text-4xl font-bold text-blue-500">{{ $upcomingDeadlines }}</h2>
-                <p class="text-gray-600">Upcoming Deadlines</p>
+
+            <!-- completion rate -->
+            <div class="bg-white shadow rounded-lg p-6 text-center">
+                <img src="{{ asset('dashboard-icons/arrow-trend-up.png') }}" alt="Completion Rate" class="w-12 h-12 mx-auto mb-4">
+                <h2 class="text-3xl font-bold text-purple-500">{{ $progress }}%</h2>
+                <p class="text-sm text-gray-600">Completion Rate<br><span class="text-gray-500">Overall progress</span></p>
+            </div>
+
+            <!-- punkti  -->
+            <div class="bg-white shadow rounded-lg p-6 text-center">
+                <img src="{{ asset('dashboard-icons/trophy.png') }}" alt="Total Points" class="w-12 h-12 mx-auto mb-4">
+                <h2 class="text-3xl font-bold text-yellow-500">{{ $totalPoints }}</h2>
+                <p class="text-sm text-gray-600">Total Points<br><span class="text-gray-500">Motivation points earned</span></p>
             </div>
         </div>
 
-        <!-- progress bar-->
+        <!-- progress -->
         <div class="mt-8">
             <h2 class="text-xl font-semibold text-gray-700">Task Progress</h2>
             <div class="w-full bg-gray-200 rounded-full h-4 mt-2">
@@ -44,11 +59,11 @@
             <p class="text-sm text-gray-600 mt-2">{{ $progress }}% of tasks completed</p>
         </div>
 
-        <!-- reward sekcija -->
+        <!-- rewards-->
         <div class="mt-12">
             <h2 class="text-2xl font-semibold text-gray-800">Rewards</h2>
             <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
-                <!-- reward badges -->
+                <!-- badges -->
                 <div class="bg-indigo-50 border border-indigo-300 rounded-lg shadow p-4 text-center">
                     <img src="{{ asset('badges/task-master.png') }}" alt="Task Master" class="mx-auto w-16 mb-4">
                     <p class="text-lg font-semibold text-gray-700">Task Master</p>
@@ -68,16 +83,7 @@
             </div>
         </div>
 
-        <!-- search  -->
-        <div class="mt-12">
-            <form method="GET" action="{{ route('tasks.index') }}" class="flex items-center gap-4">
-                <input type="text" name="search" placeholder="Search tasks..." value="{{ request('search') }}"
-                       class="w-1/3 px-4 py-2 border rounded focus:outline-none focus:ring focus:ring-blue-200">
-                <button type="submit" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Search</button>
-            </form>
-        </div>
-
-        <!-- Tasks -->
+        <!-- tasks -->
         <div class="mt-12">
             <a href="{{ route('tasks.create') }}" class="inline-block mb-4 px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600">
                 Create New Task
@@ -92,6 +98,7 @@
                         <th class="px-4 py-2">Priority</th>
                         <th class="px-4 py-2">Completed</th>
                         <th class="px-4 py-2">Deadline</th>
+                        <th class="px-4 py-2">Progress</th>
                         <th class="px-4 py-2">Actions</th>
                     </tr>
                     </thead>
@@ -107,6 +114,19 @@
                                 {{ $task->deadline }}
                             </td>
                             <td class="px-4 py-2">
+                                <div class="w-full bg-gray-200 rounded-full h-4 mb-2">
+                                    <div class="bg-blue-500 h-4 rounded-full" style="width: {{ $task->progress }}%;"></div>
+                                </div>
+                                <p class="text-sm text-gray-600">{{ $task->progress }}% completed</p>
+                                <form action="{{ route('tasks.update', $task->id) }}" method="POST">
+                                    @csrf
+                                    @method('PATCH')
+                                    <input type="range" name="progress" value="{{ $task->progress }}" 
+                                           class="w-full mt-2" min="0" max="100"
+                                           onchange="this.form.submit()">
+                                </form>
+                            </td>
+                            <td class="px-4 py-2">
                                 <a href="{{ route('tasks.edit', $task->id) }}" class="text-blue-500 hover:underline">Edit</a>
                                 |
                                 <form action="{{ route('tasks.destroy', $task->id) }}" method="POST" style="display:inline;">
@@ -118,7 +138,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="px-4 py-6 text-center text-gray-500">No tasks found.</td>
+                            <td colspan="8" class="px-4 py-6 text-center text-gray-500">No tasks found.</td>
                         </tr>
                     @endforelse
                     </tbody>
