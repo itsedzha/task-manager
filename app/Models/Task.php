@@ -25,9 +25,11 @@ class Task extends Model
         'completed' => 'boolean',
     ];
 
-    public function subtasks()
+
+public function subtasks()
 {
     return $this->hasMany(Subtask::class);
 }
+
 
 }

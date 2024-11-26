@@ -9,19 +9,17 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::create('subtasks', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('task_id');
+            $table->foreignId('task_id')->constrained()->onDelete('cascade');
             $table->string('title');
-            $table->boolean('completed')->default(false);
             $table->timestamps();
-        
-            $table->foreign('task_id')->references('id')->on('tasks')->onDelete('cascade');
         });
-        
     }
+    
+    
 
     /**
      * Reverse the migrations.

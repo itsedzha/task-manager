@@ -4,54 +4,41 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Task;
+use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
-        $query = \App\Models\Task::query();
-    
-        // s
+        $query = Task::query();
+
         if ($request->has('search')) {
             $query->where('title', 'like', '%' . $request->input('search') . '%')
                   ->orWhere('priority', 'like', '%' . $request->input('search') . '%');
         }
-    
+
         $tasks = $query->paginate(10);
-    
-        // Dashboard Metrics
-        $totalTasks = \App\Models\Task::count();
-        $completedTasks = \App\Models\Task::where('completed', true)->count();
-        $upcomingDeadlines = \App\Models\Task::where('deadline', '>=', now())->count();
-    
-        $totalPoints = $completedTasks * 10; // 10 punkti par katru uzdevumu
-    
-        // deadline highlight
+
+        $totalTasks = Task::count();
+        $completedTasks = Task::where('completed', true)->count();
+        $upcomingDeadlines = Task::where('deadline', '>=', now())->count();
+
+        $totalPoints = $completedTasks * 10;
+
         foreach ($tasks as $task) {
             $task->is_deadline_soon = $task->deadline && $task->deadline->between(now(), now()->addDays(3));
         }
-    
-        // progresa formula
+
         $progress = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
-    
+
         return view('tasks.index', compact('tasks', 'totalTasks', 'completedTasks', 'upcomingDeadlines', 'progress', 'totalPoints'));
     }
-    
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('tasks.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -59,37 +46,39 @@ class TaskController extends Controller
             'description' => 'nullable|string',
             'priority' => 'required|in:low,medium,high',
             'deadline' => 'nullable|date',
-            'progress' => 'nullable|integer|min:0|max:100',
+            'subtasks' => 'array',
+            'subtasks.*' => 'nullable|string|max:255',
         ]);
 
-        // Default progress to 0 if not provided
-        $validated['progress'] = $validated['progress'] ?? 0;
+        $task = Task::create([
+            'title' => $validated['title'],
+            'description' => $validated['description'] ?? null,
+            'priority' => $validated['priority'],
+            'deadline' => $validated['deadline'] ?? null,
+        ]);
 
-        Task::create($validated);
+        if (!empty($validated['subtasks'])) {
+            foreach ($validated['subtasks'] as $subtaskTitle) {
+                if (!empty($subtaskTitle)) {
+                    DB::table('subtasks')->insert([
+                        'task_id' => $task->id,
+                        'title' => $subtaskTitle,
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('tasks.index')->with('success', 'Task created successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit($id)
     {
         $task = Task::findOrFail($id);
         return view('tasks.edit', compact('task'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
@@ -98,21 +87,37 @@ class TaskController extends Controller
             'priority' => 'required|in:low,medium,high',
             'deadline' => 'nullable|date',
             'progress' => 'nullable|integer|min:0|max:100',
+            'subtasks' => 'nullable|array',
+            'subtasks.*' => 'required|string|max:255',
         ]);
 
         $task = Task::findOrFail($id);
 
-        $task->update($validated);
+        $task->update([
+            'title' => $validated['title'],
+            'description' => $validated['description'],
+            'priority' => $validated['priority'],
+            'deadline' => $validated['deadline'],
+            'progress' => $validated['progress'] ?? $task->progress,
+        ]);
+
+        if (!empty($validated['subtasks'])) {
+            $task->subtasks()->delete();
+
+            foreach ($validated['subtasks'] as $subtaskTitle) {
+                $task->subtasks()->create(['title' => $subtaskTitle, 'completed' => false]);
+            }
+        }
 
         return redirect()->route('tasks.index')->with('success', 'Task updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy($id)
     {
         $task = Task::findOrFail($id);
+
+        $task->subtasks()->delete();
+
         $task->delete();
 
         return redirect()->route('tasks.index')->with('success', 'Task deleted successfully!');
