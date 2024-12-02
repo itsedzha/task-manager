@@ -13,15 +13,21 @@ class Task extends Model
         'title',
         'description',
         'priority',
-        'deadline', 
+        'deadline',
         'completed',
         'progress',
+        'user_id',
     ];
 
     protected $casts = [
-        'deadline' => 'datetime', 
+        'deadline' => 'datetime',
         'completed' => 'boolean',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function subtasks()
     {

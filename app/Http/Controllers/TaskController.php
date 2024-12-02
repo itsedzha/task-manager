@@ -10,7 +10,8 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Task::query();
+
+        $query = auth()->user()->tasks()->query();
 
         if ($request->has('search')) {
             $query->where('title', 'like', '%' . $request->input('search') . '%')
@@ -19,9 +20,9 @@ class TaskController extends Controller
 
         $tasks = $query->paginate(10);
 
-        $totalTasks = Task::count();
-        $completedTasks = Task::where('completed', true)->count();
-        $upcomingDeadlines = Task::where('deadline', '>=', now())->count();
+        $totalTasks = auth()->user()->tasks()->count();
+        $completedTasks = auth()->user()->tasks()->where('completed', true)->count();
+        $upcomingDeadlines = auth()->user()->tasks()->where('deadline', '>=', now())->count();
 
         $totalPoints = $completedTasks * 10;
 
@@ -50,7 +51,8 @@ class TaskController extends Controller
             'subtasks.*' => 'nullable|string|max:255',
         ]);
 
-        $task = Task::create([
+
+        $task = auth()->user()->tasks()->create([
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
             'priority' => $validated['priority'],
