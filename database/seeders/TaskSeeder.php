@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
+use App\Models\User; 
 
 class TaskSeeder extends Seeder
 {
@@ -13,45 +14,31 @@ class TaskSeeder extends Seeder
      */
     public function run(): void
     {
-        // Insert sample tasks
-        DB::table('tasks')->insert([
-            [
-                'title' => 'Task 1',
-                'description' => 'Complete math homework',
-                'priority' => 'low',
-                'completed' => false,
-                'deadline' => Carbon::now()->addDays(3), // 3 days from now
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'title' => 'Task 2',
-                'description' => 'Prepare for physics exam',
-                'priority' => 'high',
-                'completed' => false,
-                'deadline' => Carbon::now()->addDays(1), // 1 day from now
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'title' => 'Task 3',
-                'description' => 'Write English essay',
-                'priority' => 'medium',
-                'completed' => true,
-                'deadline' => Carbon::now()->subDay(), 
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            [
-                'title' => 'Task 4',
-                'description' => 'Read a book',
-                'priority' => 'medium',
-                'completed' => false,
-                'deadline' => null, 
-                'created_at' => Carbon::now(),
-                'updated_at' => Carbon::now(),
-            ],
-            
-        ]);
+        $user = User::first(); 
+
+        if ($user) {
+            DB::table('tasks')->insert([
+                [
+                    'title' => 'Task 1',
+                    'description' => 'Complete math homework',
+                    'priority' => 'low',
+                    'completed' => false,
+                    'deadline' => Carbon::now()->addDays(3),
+                    'user_id' => $user->id, // Associate with the first user
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ],
+                [
+                    'title' => 'Task 2',
+                    'description' => 'Prepare for physics exam',
+                    'priority' => 'high',
+                    'completed' => false,
+                    'deadline' => Carbon::now()->addDays(1),
+                    'user_id' => $user->id, // Associate with the first user
+                    'created_at' => Carbon::now(),
+                    'updated_at' => Carbon::now(),
+                ],
+            ]);
+        }
     }
 }

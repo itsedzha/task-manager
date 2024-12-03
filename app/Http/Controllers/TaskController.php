@@ -10,29 +10,23 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
-
-        $query = auth()->user()->tasks()->query();
+        $query = Task::where('user_id', auth()->id());
 
         if ($request->has('search')) {
-            $query->where('title', 'like', '%' . $request->input('search') . '%')
-                  ->orWhere('priority', 'like', '%' . $request->input('search') . '%');
+            $query->where(function ($subQuery) use ($request) {
+                $subQuery->where('title', 'like', '%' . $request->input('search') . '%')
+                         ->orWhere('priority', 'like', '%' . $request->input('search') . '%');
+            });
         }
 
         $tasks = $query->paginate(10);
 
-        $totalTasks = auth()->user()->tasks()->count();
-        $completedTasks = auth()->user()->tasks()->where('completed', true)->count();
-        $upcomingDeadlines = auth()->user()->tasks()->where('deadline', '>=', now())->count();
-
+        $totalTasks = Task::where('user_id', auth()->id())->count();
+        $completedTasks = Task::where('user_id', auth()->id())->where('completed', true)->count();
         $totalPoints = $completedTasks * 10;
-
-        foreach ($tasks as $task) {
-            $task->is_deadline_soon = $task->deadline && $task->deadline->between(now(), now()->addDays(3));
-        }
-
         $progress = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
 
-        return view('tasks.index', compact('tasks', 'totalTasks', 'completedTasks', 'upcomingDeadlines', 'progress', 'totalPoints'));
+        return view('tasks.index', compact('tasks', 'totalTasks', 'completedTasks', 'totalPoints', 'progress'));
     }
 
     public function create()
@@ -51,12 +45,12 @@ class TaskController extends Controller
             'subtasks.*' => 'nullable|string|max:255',
         ]);
 
-
-        $task = auth()->user()->tasks()->create([
+        $task = Task::create([
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
             'priority' => $validated['priority'],
             'deadline' => $validated['deadline'] ?? null,
+            'user_id' => auth()->id(), 
         ]);
 
         if (!empty($validated['subtasks'])) {
@@ -74,6 +68,7 @@ class TaskController extends Controller
 
         return redirect()->route('tasks.index')->with('success', 'Task created successfully!');
     }
+
 
     public function edit($id)
     {
