@@ -21,13 +21,51 @@
             color: #FFD700;
         }
 
-        .bin-icon {
-            color: #FF0000;
+        .priority-high {
+            background-color: #ffe5e5;
+            color: #d90000;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: bold;
+        }
+
+        .priority-medium {
+            background-color: #fff8db;
+            color: #ff9900;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: bold;
+        }
+
+        .priority-low {
+            background-color: #e9f6e7;
+            color: #009900;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: bold;
+        }
+
+        .circle {
+            border: 2px solid #9ca3af;
+            border-radius: 50%;
+            height: 1.5rem;
+            width: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
         }
 
-        .bin-icon:hover {
-            color: #CC0000;
+        .circle.checked {
+            border-color: #4caf50;
+            background-color: #4caf50;
+        }
+
+        .circle.checked .material-symbols-outlined {
+            color: white;
         }
     </style>
 </head>
@@ -42,7 +80,6 @@
             {{ session('success') }}
         </div>
         @endif
-
 
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
             <div class="bg-white shadow rounded-lg p-6 text-center">
@@ -103,39 +140,68 @@
             </div>
         </div>
 
-
         <div class="mt-12">
             <h2 class="text-2xl font-semibold text-gray-800">Your Tasks</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
                 @forelse ($tasks as $task)
                 <div class="bg-white shadow rounded-lg p-4">
-                    <h3 class="text-lg font-semibold text-gray-800">{{ $task->title }}</h3>
+                    <div class="flex items-center space-x-2">
+                        <div class="circle {{ $task->completed ? 'checked' : '' }}"
+                            onclick="document.getElementById('task-complete-{{ $task->id }}').submit();">
+                            @if ($task->completed)
+                            <span class="material-symbols-outlined">check</span>
+                            @endif
+                        </div>
+                        <h3
+                            class="text-lg font-semibold text-gray-800 {{ $task->completed ? 'line-through text-gray-500' : '' }}">
+                            {{ $task->title }}
+                        </h3>
+                    </div>
                     <p class="text-gray-600 text-sm">{{ $task->description }}</p>
-
                     <div class="flex items-center text-sm text-gray-600 mt-2">
                         <span class="material-symbols-outlined text-gray-500 mr-1">calendar_month</span>
                         {{ $task->deadline ? $task->deadline->format('M d, Y') : 'No deadline' }}
                     </div>
+                    <span
+                        class="{{ $task->priority === 'high' ? 'priority-high' : ($task->priority === 'medium' ? 'priority-medium' : 'priority-low') }}">
+                        {{ ucfirst($task->priority) }}
+                    </span>
 
                     @if ($task->subtasks->count() > 0)
-<div class="mt-4">
-    <h4 class="text-sm font-medium text-gray-700">Subtasks</h4>
-    <div class="grid gap-2">
-        @foreach ($task->subtasks as $subtask)
-        <div class="flex items-center justify-between bg-gray-100 p-2 rounded">
-            <span>{{ $subtask->title }}</span>
-            <form action="{{ route('subtasks.destroy', $subtask->id) }}" method="POST">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="text-gray-500 hover:text-gray-700 text-lg font-bold">
-                    &#x2716;
-                </button>
-            </form>
-        </div>
-        @endforeach
-    </div>
-</div>
-@endif
+                    <div class="mt-4">
+                        <h4 class="text-sm font-medium text-gray-700">Subtasks</h4>
+                        <div class="grid gap-2">
+                            @foreach ($task->subtasks as $subtask)
+                            <div class="flex items-center justify-between bg-gray-100 p-2 rounded">
+                                <div class="flex items-center space-x-2">
+                                    <div class="circle {{ $subtask->completed ? 'checked' : '' }}"
+                                        onclick="document.getElementById('subtask-complete-{{ $subtask->id }}').submit();">
+                                        @if ($subtask->completed)
+                                        <span class="material-symbols-outlined">check</span>
+                                        @endif
+                                    </div>
+                                    <span
+                                        class="{{ $subtask->completed ? 'line-through text-gray-500' : '' }}">{{ $subtask->title }}</span>
+                                </div>
+                                <form action="{{ route('subtasks.destroy', $subtask->id) }}" method="POST">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-gray-500 hover:text-gray-700 text-lg font-bold">
+                                        &#x2716;
+                                    </button>
+                                </form>
+                                <form id="subtask-complete-{{ $subtask->id }}"
+                                    action="{{ route('subtasks.update', $subtask->id) }}" method="POST"
+                                    style="display: none;">
+                                    @csrf
+                                    @method('PATCH')
+                                    <input type="hidden" name="completed" value="{{ $subtask->completed ? 0 : 1 }}">
+                                </form>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
 
                     <div class="flex items-center justify-between mt-4">
                         <span class="flex items-center">
@@ -150,6 +216,12 @@
                             </button>
                         </form>
                     </div>
+                    <form id="task-complete-{{ $task->id }}" action="{{ route('tasks.update', $task->id) }}"
+                        method="POST" style="display: none;">
+                        @csrf
+                        @method('PATCH')
+                        <input type="hidden" name="completed" value="{{ $task->completed ? 0 : 1 }}">
+                    </form>
                 </div>
                 @empty
                 <p class="text-center text-gray-500">No tasks found. Create your first task!</p>

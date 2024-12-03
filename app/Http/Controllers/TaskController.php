@@ -78,6 +78,13 @@ class TaskController extends Controller
 
     public function update(Request $request, $id)
     {
+        $task = Task::findOrFail($id);
+    
+        if ($request->has('completed')) {
+            $task->update(['completed' => $request->input('completed')]);
+            return redirect()->route('tasks.index')->with('success', 'Task completion status updated!');
+        }
+    
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
@@ -87,9 +94,7 @@ class TaskController extends Controller
             'subtasks' => 'nullable|array',
             'subtasks.*' => 'required|string|max:255',
         ]);
-
-        $task = Task::findOrFail($id);
-
+    
         $task->update([
             'title' => $validated['title'],
             'description' => $validated['description'],
@@ -97,18 +102,18 @@ class TaskController extends Controller
             'deadline' => $validated['deadline'],
             'progress' => $validated['progress'] ?? $task->progress,
         ]);
-
+    
         if (!empty($validated['subtasks'])) {
             $task->subtasks()->delete();
-
+    
             foreach ($validated['subtasks'] as $subtaskTitle) {
                 $task->subtasks()->create(['title' => $subtaskTitle, 'completed' => false]);
             }
         }
-
+    
         return redirect()->route('tasks.index')->with('success', 'Task updated successfully!');
     }
-
+    
     public function destroy($id)
     {
         $task = Task::findOrFail($id);
