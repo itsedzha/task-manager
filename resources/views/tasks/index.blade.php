@@ -243,9 +243,9 @@
         <div class="bg-white shadow rounded-lg p-6 text-center">
             <span class="material-symbols-outlined text-blue-500 text-5xl">air</span>
             <h3 class="text-lg font-bold text-gray-800 mt-2">Box Breathing</h3>
-            <p class="text-sm text-gray-500">2 minutes</p>
+            <p class="text-sm text-gray-500" id="box-timer">2 minutes</p>
             <p class="text-sm text-gray-600 mt-2">Breathe in for 4 counts, hold for 4, exhale for 4, hold for 4. Repeat.</p>
-            <button id="start-box-breathing"
+            <button id="box-breathing-btn" onclick="toggleTimer('box-timer', 'box-breathing-btn', 120)"
                 class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                 Start Exercise
             </button>
@@ -254,9 +254,9 @@
         <div class="bg-white shadow rounded-lg p-6 text-center">
             <span class="material-symbols-outlined text-green-500 text-5xl">favorite</span>
             <h3 class="text-lg font-bold text-gray-800 mt-2">Body Scan</h3>
-            <p class="text-sm text-gray-500">5 minutes</p>
+            <p class="text-sm text-gray-500" id="body-timer">5 minutes</p>
             <p class="text-sm text-gray-600 mt-2">Close your eyes and focus on each part of your body, releasing tension.</p>
-            <button id="start-body-scan"
+            <button id="body-scan-btn" onclick="toggleTimer('body-timer', 'body-scan-btn', 300)"
                 class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                 Start Exercise
             </button>
@@ -265,12 +265,57 @@
         <div class="bg-white shadow rounded-lg p-6 text-center">
             <span class="material-symbols-outlined text-yellow-500 text-5xl">spa</span>
             <h3 class="text-lg font-bold text-gray-800 mt-2">Mindful Moment</h3>
-            <p class="text-sm text-gray-500">1 minute</p>
+            <p class="text-sm text-gray-500" id="mindful-timer">1 minute</p>
             <p class="text-sm text-gray-600 mt-2">Take a moment to observe your surroundings using all your senses.</p>
-            <button id="start-mindful-moment"
+            <button id="mindful-moment-btn" onclick="toggleTimer('mindful-timer', 'mindful-moment-btn', 60)"
                 class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
                 Start Exercise
             </button>
         </div>
     </div>
 </div>
+
+<script>
+    const timers = {};
+
+    function toggleTimer(timerId, buttonId, duration) {
+        const timerDisplay = document.getElementById(timerId);
+        const button = document.getElementById(buttonId);
+
+        // If timer already running, stop and reset
+        if (timers[timerId]) {
+            clearInterval(timers[timerId]);
+            delete timers[timerId];
+            timerDisplay.textContent = buttonId === "box-breathing-btn"
+                ? "2 minutes"
+                : buttonId === "body-scan-btn"
+                ? "5 minutes"
+                : "1 minute";
+            button.textContent = "Start Exercise";
+            button.classList.remove("bg-red-500");
+            button.classList.add("bg-blue-500");
+        } else {
+            // timer start
+            button.textContent = "Cancel Exercise";
+            button.classList.remove("bg-blue-500");
+            button.classList.add("bg-red-500");
+
+            let timer = duration;
+
+            timers[timerId] = setInterval(() => {
+                const minutes = Math.floor(timer / 60);
+                const seconds = timer % 60;
+                timerDisplay.textContent = `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+
+                if (--timer < 0) {
+                    clearInterval(timers[timerId]);
+                    delete timers[timerId];
+                    timerDisplay.textContent = "Done!";
+                    button.textContent = "Start Exercise";
+                    button.classList.remove("bg-red-500");
+                    button.classList.add("bg-blue-500");
+                }
+            }, 1000);
+        }
+    }
+</script>
