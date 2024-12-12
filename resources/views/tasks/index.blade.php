@@ -9,65 +9,86 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <style>
-        .material-symbols-outlined {
-            font-variation-settings:
-                'FILL' 0,
-                'wght' 400,
-                'GRAD' 0,
-                'opsz' 24;
-        }
+    .material-symbols-outlined {
+        font-variation-settings:
+            'FILL' 0,
+            'wght' 400,
+            'GRAD' 0,
+            'opsz' 24;
+    }
 
-        .trophy-icon {
-            color: #FFD700;
-        }
+    .trophy-icon {
+        color: #FFD700;
+    }
 
-        .priority-high {
-            background-color: #ffe5e5;
-            color: #d90000;
-            padding: 0.2rem 0.5rem;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: bold;
-        }
+    .priority-high {
+        background-color: #ffe5e5;
+        color: #d90000;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: bold;
+    }
 
-        .priority-medium {
-            background-color: #fff8db;
-            color: #ff9900;
-            padding: 0.2rem 0.5rem;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: bold;
-        }
+    .priority-medium {
+        background-color: #fff8db;
+        color: #ff9900;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: bold;
+    }
 
-        .priority-low {
-            background-color: #e9f6e7;
-            color: #009900;
-            padding: 0.2rem 0.5rem;
-            border-radius: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: bold;
-        }
+    .priority-low {
+        background-color: #e9f6e7;
+        color: #009900;
+        padding: 0.2rem 0.5rem;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        font-weight: bold;
+    }
 
-        .circle {
-            border: 2px solid #9ca3af;
-            border-radius: 50%;
-            height: 1.5rem;
-            width: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-        }
+    .circle {
+        border: 2px solid #9ca3af;
+        border-radius: 50%;
+        height: 1.5rem;
+        width: 1.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+    }
 
-        .circle.checked {
-            border-color: #4caf50;
-            background-color: #4caf50;
-        }
+    .circle.checked {
+        border-color: #4caf50;
+        background-color: #4caf50;
+    }
 
-        .circle.checked .material-symbols-outlined {
-            color: white;
-        }
-    </style>
+    .circle.checked .material-symbols-outlined {
+        color: white;
+    }
+
+    #side-menu a {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        color: #A5B4FC;
+        text-decoration: none;
+        transition: background-color 0.2s, color 0.2s;
+    }
+
+    #side-menu a:hover {
+        background-color: #3B82F6;
+        color: #E0F2FE;
+    }
+
+    #side-menu a.active {
+        background-color: #1E40AF;
+        color: white;
+    }
+</style>
+
 </head>
 
 <body class="bg-gray-50 font-sans">
