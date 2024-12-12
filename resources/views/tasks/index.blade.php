@@ -98,7 +98,8 @@
     </div>
 </div>
 
-    <div class="container mx-auto py-6">
+<div class="container mx-auto py-6 ml-64">
+
         <h1 class="text-3xl font-bold text-center text-gray-800">Task Manager</h1>
 
         @if (session('success'))
