@@ -9,6 +9,12 @@
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
         <style>
+    body {
+        background-color: #181b34;
+        color: #F8FAFC;
+        font-family: 'Inter', sans-serif;
+    }
+
     .material-symbols-outlined {
         font-variation-settings:
             'FILL' 0,
@@ -22,8 +28,8 @@
     }
 
     .priority-high {
-        background-color: #ffe5e5;
-        color: #d90000;
+        background-color: #4c1d2f;
+        color: #ff4d5a;
         padding: 0.2rem 0.5rem;
         border-radius: 0.5rem;
         font-size: 0.875rem;
@@ -31,8 +37,8 @@
     }
 
     .priority-medium {
-        background-color: #fff8db;
-        color: #ff9900;
+        background-color: #453413;
+        color: #ffb347;
         padding: 0.2rem 0.5rem;
         border-radius: 0.5rem;
         font-size: 0.875rem;
@@ -40,8 +46,8 @@
     }
 
     .priority-low {
-        background-color: #e9f6e7;
-        color: #009900;
+        background-color: #1c3527;
+        color: #6cff9f;
         padding: 0.2rem 0.5rem;
         border-radius: 0.5rem;
         font-size: 0.875rem;
@@ -49,7 +55,7 @@
     }
 
     .circle {
-        border: 2px solid #9ca3af;
+        border: 2px solid #64748b;
         border-radius: 50%;
         height: 1.5rem;
         width: 1.5rem;
@@ -60,12 +66,24 @@
     }
 
     .circle.checked {
-        border-color: #4caf50;
-        background-color: #4caf50;
+        border-color: #22c55e;
+        background-color: #22c55e;
     }
 
     .circle.checked .material-symbols-outlined {
         color: white;
+    }
+
+    #side-menu {
+        background-color: #292f4c;
+        width: 240px;
+        height: 100vh;
+        padding: 1rem;
+    }
+
+    #side-menu h2 {
+        color: #A5B4FC;
+        margin-bottom: 1rem;
     }
 
     #side-menu a {
@@ -88,9 +106,69 @@
         color: white;
     }
 
-    /* task card */
+    .dashboard-card {
+    background-color: #292f4c;
+    border: 1px solid #3B425A;
+    border-radius: 0.5rem;
+    text-align: center;
+    padding: 1.5rem;
+    color: #E5E7EB;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-0.5rem);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.dashboard-card span {
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+.dashboard-card h2 {
+    color: #F8FAFC;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.dashboard-card p {
+    color: #D1D5DB;
+    font-size: 1rem;
+}
+
+
+    /* Rewards Section */
+    .reward-card {
+        background-color: #292f4c;
+        border: 1px solid #3B425A;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        padding: 1rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .reward-card:hover {
+        transform: translateY(-0.5rem);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    .reward-card span {
+        color: #A5B4FC;
+    }
+
+    .reward-card p {
+        color: #E5E7EB;
+    }
+
+    .reward-card:hover p {
+        color: #FFFFFF;
+    }
+
     .task-card {
-        background-color: white;
+        background-color: #292f4c;
         border-radius: 0.5rem;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         padding: 1rem;
@@ -104,7 +182,7 @@
 
     .task-title {
         font-weight: 600;
-        color: #1E293B;
+        color: #A5B4FC;
     }
 
     .task-title.completed {
@@ -115,7 +193,7 @@
     .subtask-container {
         margin-top: 1rem;
         padding-left: 1.5rem;
-        border-left: 2px solid #E5E7EB;
+        border-left: 2px solid #3B425A;
     }
 
     .subtask-item {
@@ -124,25 +202,38 @@
         align-items: center;
         margin-bottom: 0.5rem;
         padding: 0.5rem;
-        background-color: #F9FAFB;
+        background-color: #3B425A;
         border-radius: 0.5rem;
         transition: background-color 0.2s ease;
     }
 
     .subtask-item:hover {
-        background-color: #E5E7EB;
+        background-color: #4B5563;
     }
 
     .subtask-title {
         font-size: 0.875rem;
-        color: #374151;
+        color: #E5E7EB;
     }
 
     .subtask-title.completed {
         text-decoration: line-through;
         color: #9CA3AF;
     }
+
+    .bright-bg {
+        background-color: #4C4F72;
+        color: #E5E7EB;
+        border-radius: 0.5rem;
+        padding: 1.5rem;
+    }
+
+    .bright-bg h2,
+    .bright-bg p {
+        color: #F8FAFC;
+    }
 </style>
+
 
 
 </head>
@@ -181,7 +272,8 @@
 
 <div class="container mx-auto py-6 ml-64">
 
-        <h1 class="text-3xl font-bold text-center text-gray-800">Task Manager</h1>
+<h1 class="text-3xl font-bold text-center text-white">Task Manager</h1>
+
 
         @if (session('success'))
         <div class="bg-green-100 text-green-700 p-4 rounded mt-4">
@@ -190,63 +282,67 @@
         @endif
 
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
-            <div class="bg-white shadow rounded-lg p-6 text-center">
-                <img src="{{ asset('dashboard-icons/list-check.png') }}" alt="Total Tasks"
-                    class="w-12 h-12 mx-auto mb-4">
-                <h2 class="text-3xl font-bold text-blue-500">{{ $totalTasks }}</h2>
-                <p class="text-sm text-gray-600">Total Tasks<br><span class="text-gray-500">All tasks created</span></p>
-            </div>
+    <!-- total tasks -->
+    <div class="dashboard-card">
+        <span class="material-symbols-outlined text-blue-400 text-6xl mb-2">list_alt</span>
+        <h2 class="text-3xl font-bold">{{ $totalTasks }}</h2>
+        <p class="text-lg text-gray-400">All tasks created</p>
+    </div>
 
-            <div class="bg-white shadow rounded-lg p-6 text-center">
-                <img src="{{ asset('dashboard-icons/check-circle.png') }}" alt="Completed Tasks"
-                    class="w-12 h-12 mx-auto mb-4">
-                <h2 class="text-3xl font-bold text-green-500">{{ $completedTasks }}</h2>
-                <p class="text-sm text-gray-600">Completed Tasks<br><span class="text-gray-500">Tasks finished</span></p>
-            </div>
+    <!-- completed tasks -->
+    <div class="dashboard-card">
+        <span class="material-symbols-outlined text-green-400 text-6xl mb-2">check_circle</span>
+        <h2 class="text-3xl font-bold">{{ $completedTasks }}</h2>
+        <p class="text-lg text-gray-400">Tasks finished</p>
+    </div>
 
-            <div class="bg-white shadow rounded-lg p-6 text-center">
-                <img src="{{ asset('dashboard-icons/arrow-trend-up.png') }}" alt="Completion Rate"
-                    class="w-12 h-12 mx-auto mb-4">
-                <h2 class="text-3xl font-bold text-purple-500">{{ $progress }}%</h2>
-                <p class="text-sm text-gray-600">Completion Rate<br><span class="text-gray-500">Overall progress</span></p>
-                <div class="w-3/4 mx-auto bg-gray-200 rounded-full h-2 mt-2">
-                    <div class="bg-purple-500 h-2 rounded-full" style="width: {{ $progress }}%;"></div>
-                </div>
-            </div>
-
-            <div class="bg-white shadow rounded-lg p-6 text-center">
-                <img src="{{ asset('dashboard-icons/trophy.png') }}" alt="Total Points" class="w-12 h-12 mx-auto mb-4">
-                <h2 class="text-3xl font-bold text-yellow-500">{{ $totalPoints }}</h2>
-                <p class="text-sm text-gray-600">Total Points<br><span class="text-gray-500">Motivation points
-                        earned</span></p>
-            </div>
+    <!-- comp rrate -->
+    <div class="dashboard-card">
+        <span class="material-symbols-outlined text-purple-400 text-6xl mb-2">trending_up</span>
+        <h2 class="text-3xl font-bold">{{ $progress }}%</h2>
+        <p class="text-lg text-gray-400">Overall progress</p>
+        <div class="w-3/4 mx-auto bg-gray-700 rounded-full h-2 mt-4">
+            <div class="bg-purple-500 h-2 rounded-full" style="width: {{ $progress }}%;"></div>
         </div>
+    </div>
+
+    <!-- toatl points -->
+    <div class="dashboard-card">
+        <span class="material-symbols-outlined text-yellow-400 text-6xl mb-2">emoji_events</span>
+        <h2 class="text-3xl font-bold">{{ $totalPoints }}</h2>
+        <p class="text-lg text-gray-400">Motivation points earned</p>
+    </div>
+</div>
+
+
 
         <div class="mt-12">
-            <h2 class="text-2xl font-semibold text-gray-800">Rewards</h2>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
-                <div class="bg-indigo-50 border border-indigo-300 rounded-lg shadow p-4 text-center">
-                    <span class="material-symbols-outlined text-purple-500 text-6xl">emoji_events</span>
-                    <p class="text-lg font-semibold text-gray-700 mt-2">Task Master Badge</p>
-                    <p class="text-gray-500 text-sm">Complete 5 tasks</p>
-                </div>
-                <div class="bg-indigo-50 border border-indigo-300 rounded-lg shadow p-4 text-center">
-                    <span class="material-symbols-outlined text-blue-500 text-6xl">star</span>
-                    <p class="text-lg font-semibold text-gray-700 mt-2">Productivity Star</p>
-                    <p class="text-gray-500 text-sm">Complete 10 high-priority tasks</p>
-                </div>
-                <div class="bg-indigo-50 border border-indigo-300 rounded-lg shadow p-4 text-center">
-                    <span class="material-symbols-outlined text-green-500 text-6xl">target</span>
-                    <p class="text-lg font-semibold text-gray-700 mt-2">Goal Crusher</p>
-                    <p class="text-gray-500 text-sm">Complete all tasks before deadline</p>
-                </div>
-                <div class="bg-indigo-50 border border-indigo-300 rounded-lg shadow p-4 text-center">
-                    <span class="material-symbols-outlined text-yellow-500 text-6xl">workspace_premium</span>
-                    <p class="text-lg font-semibold text-gray-700 mt-2">Ultimate Achiever</p>
-                    <p class="text-gray-500 text-sm">Complete 20 tasks</p>
-                </div>
-            </div>
+    <h2 class="text-2xl font-semibold text-gray-300">Rewards</h2>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
+        <div class="reward-card">
+            <span class="material-symbols-outlined text-purple-400 text-6xl">emoji_events</span>
+            <p class="text-lg font-semibold text-gray-200 mt-2">Task Master Badge</p>
+            <p class="text-gray-400 text-sm">Complete 5 tasks</p>
         </div>
+        <div class="reward-card">
+            <span class="material-symbols-outlined text-blue-400 text-6xl">star</span>
+            <p class="text-lg font-semibold text-gray-200 mt-2">Productivity Star</p>
+            <p class="text-gray-400 text-sm">Complete 10 high-priority tasks</p>
+        </div>
+        <div class="reward-card">
+            <span class="material-symbols-outlined text-green-400 text-6xl">target</span>
+            <p class="text-lg font-semibold text-gray-200 mt-2">Goal Crusher</p>
+            <p class="text-gray-400 text-sm">Complete all tasks before deadline</p>
+        </div>
+        <div class="reward-card">
+            <span class="material-symbols-outlined text-yellow-400 text-6xl">workspace_premium</span>
+            <p class="text-lg font-semibold text-gray-200 mt-2">Ultimate Achiever</p>
+            <p class="text-gray-400 text-sm">Complete 20 tasks</p>
+        </div>
+    </div>
+</div>
+
+
 
         <div class="mt-12">
     <h2 class="text-2xl font-semibold text-gray-800">Your Tasks</h2>
