@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <style>
+        <style>
     .material-symbols-outlined {
         font-variation-settings:
             'FILL' 0,
@@ -87,11 +87,71 @@
         background-color: #1E40AF;
         color: white;
     }
+
+    /* task card */
+    .task-card {
+        background-color: white;
+        border-radius: 0.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 1rem;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .task-card:hover {
+        transform: translateY(-0.5rem);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    .task-title {
+        font-weight: 600;
+        color: #1E293B;
+    }
+
+    .task-title.completed {
+        text-decoration: line-through;
+        color: #6B7280;
+    }
+
+    .subtask-container {
+        margin-top: 1rem;
+        padding-left: 1.5rem;
+        border-left: 2px solid #E5E7EB;
+    }
+
+    .subtask-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+        padding: 0.5rem;
+        background-color: #F9FAFB;
+        border-radius: 0.5rem;
+        transition: background-color 0.2s ease;
+    }
+
+    .subtask-item:hover {
+        background-color: #E5E7EB;
+    }
+
+    .subtask-title {
+        font-size: 0.875rem;
+        color: #374151;
+    }
+
+    .subtask-title.completed {
+        text-decoration: line-through;
+        color: #9CA3AF;
+    }
 </style>
+
 
 </head>
 
 <body class="bg-gray-50 font-sans">
+    
+<button id="menu-toggle" class="md:hidden fixed top-4 left-4 z-50 bg-blue-900 text-white p-2 rounded">
+    <span class="material-symbols-outlined">menu</span>
+</button>
 
 <div id="side-menu" class="bg-blue-900 text-white h-screen w-64 fixed flex flex-col">
     <div class="p-6">
@@ -192,7 +252,7 @@
     <h2 class="text-2xl font-semibold text-gray-800">Your Tasks</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
         @forelse ($tasks as $task)
-        <div class="bg-white shadow rounded-lg p-4">
+        <div class="task-card">
             <div class="flex items-center space-x-2">
                 <div class="circle {{ $task->completed ? 'checked' : '' }}"
                     onclick="document.getElementById('task-complete-{{ $task->id }}').submit();">
@@ -200,8 +260,7 @@
                     <span class="material-symbols-outlined">check</span>
                     @endif
                 </div>
-                <h3
-                    class="text-lg font-semibold text-gray-800 {{ $task->completed ? 'line-through text-gray-500' : '' }}">
+                <h3 class="task-title {{ $task->completed ? 'completed' : '' }}">
                     {{ $task->title }}
                 </h3>
             </div>
@@ -216,11 +275,11 @@
             </span>
 
             @if ($task->subtasks->count() > 0)
-            <div class="mt-4">
+            <div class="subtask-container">
                 <h4 class="text-sm font-medium text-gray-700">Subtasks</h4>
                 <div class="grid gap-2">
                     @foreach ($task->subtasks as $subtask)
-                    <div class="flex items-center justify-between bg-gray-100 p-2 rounded">
+                    <div class="subtask-item">
                         <div class="flex items-center space-x-2">
                             <div class="circle {{ $subtask->completed ? 'checked' : '' }}"
                                 onclick="document.getElementById('subtask-complete-{{ $subtask->id }}').submit();">
@@ -228,8 +287,9 @@
                                 <span class="material-symbols-outlined">check</span>
                                 @endif
                             </div>
-                            <span
-                                class="{{ $subtask->completed ? 'line-through text-gray-500' : '' }}">{{ $subtask->title }}</span>
+                            <span class="subtask-title {{ $subtask->completed ? 'completed' : '' }}">
+                                {{ $subtask->title }}
+                            </span>
                         </div>
                         <form action="{{ route('subtasks.destroy', $subtask->id) }}" method="POST">
                             @csrf
@@ -239,7 +299,8 @@
                             </button>
                         </form>
                         <form id="subtask-complete-{{ $subtask->id }}"
-                            action="{{ route('subtasks.update', $subtask->id) }}" method="POST" style="display: none;">
+                            action="{{ route('subtasks.update', $subtask->id) }}" method="POST"
+                            style="display: none;">
                             @csrf
                             @method('PATCH')
                             <input type="hidden" name="completed" value="{{ $subtask->completed ? 0 : 1 }}">
@@ -275,6 +336,7 @@
         @endforelse
     </div>
 </div>
+
 
 <div class="mt-8 text-right">
     <a href="{{ route('tasks.create') }}"
