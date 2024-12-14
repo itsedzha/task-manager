@@ -139,33 +139,41 @@
 }
 
 
-    /* Rewards Section */
-    .reward-card {
-        background-color: #292f4c;
-        border: 1px solid #3B425A;
-        border-radius: 0.5rem;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        text-align: center;
-        padding: 1rem;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
+.reward-card {
+    background-color: #292f4c; 
+    border: 1px solid #3B425A;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    padding: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
 
-    .reward-card:hover {
-        transform: translateY(-0.5rem);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-    }
+.reward-card:hover {
+    background-color: #1f253b; 
+    transform: translateY(-0.5rem);
+    box-shadow: 0 0 15px rgba(165, 180, 252, 0.5); 
+}
 
-    .reward-card span {
-        color: #A5B4FC;
-    }
 
-    .reward-card p {
-        color: #E5E7EB;
-    }
+.reward-card span {
+    color: #A5B4FC;
+    transition: filter 0.2s ease;
+}
 
-    .reward-card:hover p {
-        color: #FFFFFF;
-    }
+.reward-card:hover span {
+    filter: drop-shadow(0 0 10px rgba(165, 180, 252, 0.8)); 
+}
+
+
+.reward-card p {
+    color: #E5E7EB;
+}
+
+.reward-card:hover p {
+    color: #FFFFFF; 
+}
+
 
     .task-card {
         background-color: #292f4c;
@@ -316,31 +324,33 @@
 
 
 
-        <div class="mt-12">
+<div class="mt-12">
     <h2 class="text-2xl font-semibold text-gray-300">Rewards</h2>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
         <div class="reward-card">
             <span class="material-symbols-outlined text-purple-400 text-6xl">emoji_events</span>
-            <p class="text-lg font-semibold text-gray-200 mt-2">Task Master Badge</p>
-            <p class="text-gray-400 text-sm">Complete 5 tasks</p>
+            <p class="text-lg font-semibold mt-2">Task Master Badge</p>
+            <p class="text-sm">Complete 5 tasks</p>
         </div>
         <div class="reward-card">
             <span class="material-symbols-outlined text-blue-400 text-6xl">star</span>
-            <p class="text-lg font-semibold text-gray-200 mt-2">Productivity Star</p>
-            <p class="text-gray-400 text-sm">Complete 10 high-priority tasks</p>
+            <p class="text-lg font-semibold mt-2">Productivity Star</p>
+            <p class="text-sm">Complete 10 high-priority tasks</p>
         </div>
         <div class="reward-card">
             <span class="material-symbols-outlined text-green-400 text-6xl">target</span>
-            <p class="text-lg font-semibold text-gray-200 mt-2">Goal Crusher</p>
-            <p class="text-gray-400 text-sm">Complete all tasks before deadline</p>
+            <p class="text-lg font-semibold mt-2">Goal Crusher</p>
+            <p class="text-sm">Complete all tasks before deadline</p>
         </div>
         <div class="reward-card">
             <span class="material-symbols-outlined text-yellow-400 text-6xl">workspace_premium</span>
-            <p class="text-lg font-semibold text-gray-200 mt-2">Ultimate Achiever</p>
-            <p class="text-gray-400 text-sm">Complete 20 tasks</p>
+            <p class="text-lg font-semibold mt-2">Ultimate Achiever</p>
+            <p class="text-sm">Complete 20 tasks</p>
         </div>
     </div>
 </div>
+
+
 
 
 
