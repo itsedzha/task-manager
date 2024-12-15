@@ -1,65 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Task</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+
+        body {
+            background-color: #181b34;
+            font-family: 'Inter', sans-serif;
+            position: relative;
+            overflow: hidden;
+            color: #E5E7EB; 
+        }
+
+        .form-container {
+            background-color: #292f4c;
+            border-radius: 1rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            padding: 2rem;
+            max-width: 600px;
+            margin: 5rem auto;
+        }
+
+        label {
+            font-size: 0.9rem;
+            color: #A5B4FC;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            padding: 1rem; 
+            border-radius: 0.75rem;
+            background: #1f2436; 
+            color: #E5E7EB !important; 
+            border: 2px solid transparent;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #64748b;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #A5B4FC; 
+            box-shadow: 0 0 6px rgba(165, 180, 252, 0.8);
+        }
+
+        .submit-btn {
+            background-color: #FF4D67;
+            color: #FFFFFF;
+            padding: 1rem 2rem; 
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .submit-btn:hover {
+            background-color: #e33e58;
+            transform: translateY(-2px);
+        }
+
+        .add-subtask,
+        .remove-subtask {
+            background-color: #4D9CFF;
+            color: #FFFFFF;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: bold;
+        }
+
+        .add-subtask:hover,
+        .remove-subtask:hover {
+            background-color: #3C81CC;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 font-sans">
 
-    <div class="container mx-auto py-8">
-        <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Create New Task</h1>
+<body>
+    <div class="form-container">
+        <h1 class="text-3xl text-center font-bold text-white mb-6">Create New Task</h1>
 
-        <form action="{{ route('tasks.store') }}" method="POST" class="space-y-4 bg-white p-6 rounded shadow">
+        <form action="{{ route('tasks.store') }}" method="POST">
             @csrf
 
-            <div>
-                <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
-                <input type="text" name="title" id="title" required 
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-            </div>
+            <label for="title">Title</label>
+            <input type="text" name="title" id="title" required placeholder="Enter task title">
 
-            <div>
-                <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-                <textarea name="description" id="description" rows="3"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500"></textarea>
-            </div>
+            <label for="description">Description</label>
+            <textarea name="description" id="description" rows="3" placeholder="Write a brief description"></textarea>
 
-            <div>
-                <label for="priority" class="block text-sm font-medium text-gray-700">Priority</label>
-                <select name="priority" id="priority"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    <option value="low">Low</option>
-                    <option value="medium">Medium</option>
-                    <option value="high">High</option>
-                </select>
-            </div>
+            <label for="priority">Priority</label>
+            <select name="priority" id="priority">
+                <option value="low">Low</option>
+                <option value="medium">Medium</option>
+                <option value="high">High</option>
+            </select>
 
-            <div>
-                <label for="deadline" class="block text-sm font-medium text-gray-700">Deadline</label>
-                <input type="date" name="deadline" id="deadline"
-                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-            </div>
+            <label for="deadline">Deadline</label>
+            <input type="date" name="deadline" id="deadline">
 
             <div id="subtasks">
-                <label class="block text-sm font-medium text-gray-700">Subtasks</label>
+                <label>Subtasks</label>
                 <div class="flex items-center space-x-2 mt-2">
-                    <input type="text" name="subtasks[]" placeholder="Add a subtask"
-                        class="flex-grow rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    <button type="button" class="add-subtask bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">+</button>
+                    <input type="text" name="subtasks[]" placeholder="Add a subtask">
+                    <button type="button" class="add-subtask">+</button>
                 </div>
             </div>
+
             <template id="subtask-template">
                 <div class="flex items-center space-x-2 mt-2">
-                    <input type="text" name="subtasks[]" placeholder="Add a subtask"
-                        class="flex-grow rounded-md border-gray-300 shadow-sm focus:ring-blue-500 focus:border-blue-500">
-                    <button type="button" class="remove-subtask bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">x</button>
+                    <input type="text" name="subtasks[]" placeholder="Add a subtask">
+                    <button type="button" class="remove-subtask">x</button>
                 </div>
             </template>
 
-            <div class="text-right">
-                <button type="submit" class="bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600">Create Task</button>
+            <div class="text-center mt-6">
+                <button type="submit" class="submit-btn">Create Task</button>
             </div>
         </form>
     </div>
@@ -74,4 +146,5 @@
         });
     </script>
 </body>
+
 </html>
