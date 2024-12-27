@@ -18,6 +18,9 @@
         body {
             background-color: #181b34;
             font-family: 'Figtree', sans-serif;
+            background-size: cover;
+            background-repeat: no-repeat;
+            transition: background-image 0.5s ease-in-out;
         }
 
         .container {
@@ -96,6 +99,26 @@
         table tr:hover {
             background-color: #292f4c;
         }
+
+        .bg-options-container {
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .bg-option {
+            padding: 0.5rem 1rem;
+            background-color: #292f4c;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            margin: 0 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .bg-option:hover {
+            background-color: #3b425c;
+        }
     </style>
 </head>
 <body>
@@ -118,6 +141,12 @@
                 <h2>Progress</h2>
                 <p>{{ $progress }}%</p>
             </div>
+        </div>
+
+        <div class="bg-options-container">
+            <button class="bg-option" data-image="backgrounds/backgroundimage2.jpeg">Background 1</button>
+            <button class="bg-option" data-image="backgrounds/backgroundimage3.jpg">Background 2</button>
+            <button class="bg-option" data-image="backgrounds/backgroundimage4.jpeg">Background 3</button>
         </div>
 
         <div class="tasks-section">
@@ -144,5 +173,62 @@
             </table>
         </div>
     </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const buttons = document.querySelectorAll('.bg-option');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', function () {
+                const imagePath = this.getAttribute('data-image');
+
+                // Api save preference
+                fetch('/user-preference/store', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ background_image: imagePath })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to save background preference.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.message) {
+                        // dinamiskais update backgrounda bildei
+                        document.body.style.backgroundImage = `url(/${imagePath})`;
+                        console.log('Background updated to:', imagePath);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating background:', error);
+                });
+            });
+        });
+
+        // user preference on page load
+        fetch('/user-preference/get')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to fetch user preference.');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.background_image) {
+                    document.body.style.backgroundImage = `url(/${data.background_image})`;
+                    console.log('Background applied from preference:', data.background_image);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching background preference:', error);
+            });
+    });
+</script>
+
 </body>
 </html>
