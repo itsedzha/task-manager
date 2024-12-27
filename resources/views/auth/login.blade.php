@@ -1,47 +1,172 @@
-<x-guest-layout>
-    <!-- Session Status -->
-    <x-auth-session-status class="mb-4" :status="session('status')" />
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <form method="POST" action="{{ route('login') }}">
-        @csrf
+        <title>{{ config('app.name', 'Laravel') }}</title>
 
-        <!-- Email Address -->
-        <div>
-            <x-input-label for="email" :value="__('Email')" />
-            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus autocomplete="username" />
-            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+
+        <!-- Scripts -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <style>
+            body {
+                display: flex;
+                height: 100vh;
+                margin: 0;
+                font-family: 'Figtree', sans-serif;
+                background-color: #181b34;
+            }
+
+            .left-section {
+                flex: 1;
+                background: url('/imagees/background.png') no-repeat center center / cover;
+                position: relative;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: white;
+                padding: 2rem;
+            }
+
+            .left-section h1 {
+                font-size: 2.5rem;
+                font-weight: bold;
+            }
+
+            .left-section p {
+                margin-top: 1rem;
+                font-size: 1.2rem;
+            }
+
+            .overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.6);
+                z-index: 1;
+            }
+
+            .content {
+                position: relative;
+                z-index: 2;
+                text-align: center;
+            }
+
+            .right-section {
+                flex: 1;
+                background-color: #1e2138;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .form-container {
+                width: 100%;
+                max-width: 400px;
+                background-color: #292f4c;
+                padding: 2rem;
+                border-radius: 1rem;
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
+            }
+
+            .form-container h2 {
+                text-align: center;
+                margin-bottom: 1.5rem;
+                font-size: 1.8rem;
+                font-weight: bold;
+                color: white;
+            }
+
+            label {
+                display: block;
+                margin-bottom: 0.5rem;
+                color: #A5B4FC;
+            }
+
+            input {
+                width: 100%;
+                padding: 1rem;
+                border: none;
+                border-radius: 0.75rem;
+                background-color: #1f2436;
+                color: #E5E7EB;
+                margin-bottom: 1.5rem;
+                font-size: 1rem;
+                font-weight: 500;
+            }
+
+            input::placeholder {
+                color: #64748b;
+            }
+
+            button {
+                width: 100%;
+                padding: 1rem;
+                background-color: #FF4D67;
+                color: white;
+                font-size: 1rem;
+                font-weight: bold;
+                border: none;
+                border-radius: 0.75rem;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            button:hover {
+                background-color: #e33e58;
+            }
+
+            .text-sm {
+                text-align: center;
+                margin-top: 1rem;
+                color: #A5B4FC;
+            }
+
+            .text-sm a {
+                color: #FF4D67;
+                text-decoration: none;
+            }
+
+            .text-sm a:hover {
+                text-decoration: underline;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="left-section">
+            <div class="overlay"></div>
+            <div class="content">
+                <h1>Welcome Back to Task Manager</h1>
+                <p>Organize your tasks and stay productive!</p>
+            </div>
         </div>
+        <div class="right-section">
+            <div class="form-container">
+                <h2>Login</h2>
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
 
-        <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" :value="__('Password')" />
+                    <label for="email">Email</label>
+                    <input id="email" type="email" name="email" placeholder="Enter your email" required autofocus />
 
-            <x-text-input id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="current-password" />
+                    <label for="password">Password</label>
+                    <input id="password" type="password" name="password" placeholder="Enter your password" required />
 
-            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                    <button type="submit">Log In</button>
+
+                    <p class="text-sm">
+                        <a href="{{ route('password.request') }}">Forgot Password?</a>
+                    </p>
+                </form>
+            </div>
         </div>
-
-        <!-- Remember Me -->
-        <div class="block mt-4">
-            <label for="remember_me" class="inline-flex items-center">
-                <input id="remember_me" type="checkbox" class="rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800" name="remember">
-                <span class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('Remember me') }}</span>
-            </label>
-        </div>
-
-        <div class="flex items-center justify-end mt-4">
-            @if (Route::has('password.request'))
-                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
-                </a>
-            @endif
-
-            <x-primary-button class="ms-3">
-                {{ __('Log in') }}
-            </x-primary-button>
-        </div>
-    </form>
-</x-guest-layout>
+    </body>
+</html>
