@@ -252,31 +252,7 @@
     <span class="material-symbols-outlined">menu</span>
 </button>
 
-<div id="side-menu" class="bg-blue-900 text-white h-screen w-64 fixed flex flex-col">
-    <div class="p-6">
-        <h2 class="text-xl font-bold mb-4">Menu</h2>
-        <ul>
-            <li class="mb-2">
-                <a href="#" class="flex items-center gap-2 hover:bg-blue-800 p-2 rounded">
-                    <span class="material-symbols-outlined">home</span>
-                    Home
-                </a>
-            </li>
-            <li class="mb-2">
-                <a href="#" class="flex items-center gap-2 hover:bg-blue-800 p-2 rounded">
-                    <span class="material-symbols-outlined">work</span>
-                    My Work
-                </a>
-            </li>
-            <li class="mb-2">
-                <a href="#" class="flex items-center gap-2 hover:bg-blue-800 p-2 rounded">
-                    <span class="material-symbols-outlined">favorite</span>
-                    Favorites
-                </a>
-            </li>
-        </ul>
-    </div>
-</div>
+<x-sidebar />
 
 <div class="container mx-auto py-6 ml-64">
 

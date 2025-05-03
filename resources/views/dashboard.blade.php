@@ -121,115 +121,102 @@
         }
     </style>
 </head>
-<body>
-    
-    <div class="container">
-        <div class="greeting">
-            <h1>Welcome, {{ auth()->user()->name }}!</h1>
-            <p>Here's an overview of your tasks.</p>
-        </div>
+<body class="flex">
+    <x-sidebar />
 
-        <div class="stats">
-            <div class="card">
-                <h2>Total Tasks</h2>
-                <p>{{ $totalTasks }}</p>
+    <div class="flex-1 ml-64">
+        <div class="container">
+            <div class="greeting">
+                <h1>Welcome, {{ auth()->user()->name }}!</h1>
+                <p>Here's an overview of your tasks.</p>
             </div>
-            <div class="card">
-                <h2>Completed Tasks</h2>
-                <p>{{ $completedTasks }}</p>
-            </div>
-            <div class="card">
-                <h2>Progress</h2>
-                <p>{{ $progress }}%</p>
-            </div>
-        </div>
 
-        <div class="bg-options-container">
-            <button class="bg-option" data-image="backgrounds/backgroundimage2.jpeg">Background 1</button>
-            <button class="bg-option" data-image="backgrounds/backgroundimage3.jpg">Background 2</button>
-            <button class="bg-option" data-image="backgrounds/backgroundimage4.jpeg">Background 3</button>
-        </div>
+            <div class="stats">
+                <div class="card">
+                    <h2>Total Tasks</h2>
+                    <p>{{ $totalTasks }}</p>
+                </div>
+                <div class="card">
+                    <h2>Completed Tasks</h2>
+                    <p>{{ $completedTasks }}</p>
+                </div>
+                <div class="card">
+                    <h2>Progress</h2>
+                    <p>{{ $progress }}%</p>
+                </div>
+            </div>
 
-        <div class="tasks-section">
-            <h2>Your Tasks</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Priority</th>
-                        <th>Status</th>
-                        <th>Deadline</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($tasks as $task)
+            <div class="bg-options-container">
+                <button class="bg-option" data-image="backgrounds/backgroundimage2.jpeg">Background 1</button>
+                <button class="bg-option" data-image="backgrounds/backgroundimage3.jpg">Background 2</button>
+                <button class="bg-option" data-image="backgrounds/backgroundimage4.jpeg">Background 3</button>
+            </div>
+
+            <div class="tasks-section">
+                <h2>Your Tasks</h2>
+                <table>
+                    <thead>
                         <tr>
-                            <td>{{ $task->title }}</td>
-                            <td>{{ ucfirst($task->priority) }}</td>
-                            <td>{{ $task->completed ? 'Completed' : 'Pending' }}</td>
-                            <td>{{ $task->deadline }}</td>
+                            <th>Title</th>
+                            <th>Priority</th>
+                            <th>Status</th>
+                            <th>Deadline</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($tasks as $task)
+                            <tr>
+                                <td>{{ $task->title }}</td>
+                                <td>{{ ucfirst($task->priority) }}</td>
+                                <td>{{ $task->completed ? 'Completed' : 'Pending' }}</td>
+                                <td>{{ $task->deadline }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const buttons = document.querySelectorAll('.bg-option');
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttons = document.querySelectorAll('.bg-option');
 
-        buttons.forEach(button => {
-            button.addEventListener('click', function () {
-                const imagePath = this.getAttribute('data-image');
+            buttons.forEach(button => {
+                button.addEventListener('click', function () {
+                    const imagePath = this.getAttribute('data-image');
 
-                // Api save preference
-                fetch('/user-preference/store', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({ background_image: imagePath })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Failed to save background preference.');
-                    }
-                    return response.json();
-                })
+                    fetch('/user-preference/store', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({ background_image: imagePath })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            document.body.style.backgroundImage = `url(/${imagePath})`;
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error updating background:', error);
+                    });
+                });
+            });
+
+            fetch('/user-preference/get')
+                .then(response => response.json())
                 .then(data => {
-                    if (data.message) {
-                        // dinamiskais update backgrounda bildei
-                        document.body.style.backgroundImage = `url(/${imagePath})`;
-                        console.log('Background updated to:', imagePath);
+                    if (data.background_image) {
+                        document.body.style.backgroundImage = `url(/${data.background_image})`;
                     }
                 })
                 .catch(error => {
-                    console.error('Error updating background:', error);
+                    console.error('Error fetching background preference:', error);
                 });
-            });
         });
-
-        // user preference on page load
-        fetch('/user-preference/get')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to fetch user preference.');
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data.background_image) {
-                    document.body.style.backgroundImage = `url(/${data.background_image})`;
-                    console.log('Background applied from preference:', data.background_image);
-                }
-            })
-            .catch(error => {
-                console.error('Error fetching background preference:', error);
-            });
-    });
-</script>
-
+    </script>
 </body>
 </html>

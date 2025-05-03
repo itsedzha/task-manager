@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#side-menu {
+    background-color: #292f4c;
+    width: 240px;
+    height: 100vh;
+    padding: 1rem;
+}
+
+#side-menu h2 {
+    color: #A5B4FC;
+    margin-bottom: 1rem;
+}
+
+#side-menu a {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    color: #A5B4FC;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+#side-menu a:hover {
+    background-color: #3B82F6;
+    color: #E0F2FE;
+}
+
+#side-menu a.active {
+    background-color: #1E40AF;
+    color: white;
+}
