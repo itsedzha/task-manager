@@ -122,6 +122,7 @@
     </style>
 </head>
 <body>
+    
     <div class="container">
         <div class="greeting">
             <h1>Welcome, {{ auth()->user()->name }}!</h1>
