@@ -15,7 +15,7 @@
         </a>
     </li>
     <li>
-        <a href="#" class="flex items-center gap-2 hover:text-indigo-300">
+    <a href="{{ route('settings') }}" class="flex items-center gap-2 hover:text-indigo-300">
             <x-heroicon-o-cog class="w-5 h-5" />
             Settings
         </a>
