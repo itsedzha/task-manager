@@ -11,26 +11,32 @@ class UserPreferenceController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'background_image' => 'required|string',
+            'background_image' => 'nullable|string',
+            'avatar_color' => 'nullable|string',
         ]);
-
+    
         $user = Auth::user();
-
+    
         UserPreference::updateOrCreate(
             ['user_id' => $user->id],
-            ['background_image' => $request->background_image]
+            [
+                'background_image' => $request->background_image,
+                'avatar_color' => $request->avatar_color,
+            ]
         );
-
-        return response()->json(['message' => 'Background preference saved successfully!']);
+    
+        return response()->json(['message' => 'Preferences updated successfully!']);
     }
-
+    
     public function getPreference()
     {
         $user = Auth::user();
         $preference = UserPreference::where('user_id', $user->id)->first();
-
+    
         return response()->json([
-            'background_image' => $preference ? $preference->background_image : null,
+            'background_image' => $preference?->background_image,
+            'avatar_color' => $preference?->avatar_color,
         ]);
     }
+    
 }

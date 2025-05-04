@@ -13,6 +13,10 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
 
+    Route::get('/settings', function () {
+        return view('settings');
+    })->name('settings');
+    
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::resource('tasks', TaskController::class);
