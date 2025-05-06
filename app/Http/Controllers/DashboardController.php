@@ -16,7 +16,11 @@ class DashboardController extends Controller
         $completedTasks = $tasks->where('completed', true)->count();
         $progress = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100, 2) : 0;
 
-        // datus aizsuta uz dashboard skatu
-        return view('dashboard', compact('tasks', 'totalTasks', 'completedTasks', 'progress'));
+// background color
+        // ja nav preference, tad default ir #181b34
+        // ja preference ir, tad izmanto preference
+$backgroundColor = auth()->user()->preference->background_color ?? '#181b34';
+
+return view('dashboard', compact('tasks', 'totalTasks', 'completedTasks', 'progress', 'backgroundColor'));
     }
 }

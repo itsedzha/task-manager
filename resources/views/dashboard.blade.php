@@ -15,13 +15,13 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
-        body {
-            background-color: #181b34;
-            font-family: 'Figtree', sans-serif;
-            background-size: cover;
-            background-repeat: no-repeat;
-            transition: background-image 0.5s ease-in-out;
-        }
+      body {
+        background-color: {{ $backgroundColor ?? '#181b34' }};
+        font-family: 'Figtree', sans-serif;
+        background-size: cover;
+        background-repeat: no-repeat;
+        transition: background-color 0.5s ease-in-out;
+       }
 
         .container {
             max-width: 1200px;

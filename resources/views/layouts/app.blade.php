@@ -18,7 +18,7 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-[#181b34] text-white font-sans">
+<body class="{{ $backgroundClass ?? 'bg-[#181b34]' }} text-white font-sans">
     <x-sidebar />
 
     <div class="min-h-screen ml-64 p-8">
