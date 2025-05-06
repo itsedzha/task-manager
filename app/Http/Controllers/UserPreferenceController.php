@@ -25,8 +25,9 @@ class UserPreferenceController extends Controller
             ]
         );
     
-        return response()->json(['message' => 'Preferences updated successfully!']);
+        return redirect()->route('settings')->with('success', 'Preferences updated successfully!');
     }
+    
     
     public function getPreference()
     {

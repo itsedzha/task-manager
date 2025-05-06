@@ -6,27 +6,63 @@
 
     <p class="text-gray-300 mb-6">Here you’ll be able to customize your experience, like background and avatar color.</p>
 
+    {{-- Flash success message after saving --}}
+    @if(session('success'))
+        <div class="bg-green-600 text-white p-3 rounded mb-4">
+            {{ session('success') }}
+        </div>
+    @endif
+
     <form action="{{ route('user-preference.store') }}" method="POST" class="space-y-4">
         @csrf
+
         <h2 class="text-xl font-semibold mb-2">Choose Dashboard Background Color</h2>
 
-        @php
-            $colors = ['#181b34', '#1e2138', '#292f4c', '#3b425c', '#4a5568'];
-            $current = auth()->user()->preference->background_image ?? '#181b34';
-        @endphp
+        {{-- Color options rendered from array --}}
+        <div class="flex space-x-4" id="colorOptions">
+            @php
+                $colors = ['#1e2138', '#292f4c', '#181b34', '#2d3748', '#4a5568'];
+                $current = auth()->user()->preference->background_color ?? '';
+            @endphp
 
-        <div class="flex gap-4">
             @foreach ($colors as $color)
-                <label class="w-12 h-12 rounded-full border-4 cursor-pointer transition-all duration-200"
-                       style="background-color: {{ $color }}; border-color: {{ $current === $color ? '#805ad5' : 'transparent' }};">
-                    <input type="radio" name="background_image" value="{{ $color }}" class="sr-only">
+                <label class="cursor-pointer relative w-12 h-12 rounded-full border-4 transition-all duration-200"
+                       data-color="{{ $color }}">
+                    <input type="radio" name="background_color" value="{{ $color }}"
+                           class="absolute inset-0 opacity-0 cursor-pointer"
+                           {{ $current === $color ? 'checked' : '' }}>
+                    <div class="w-full h-full rounded-full" style="background-color: {{ $color }}"></div>
                 </label>
             @endforeach
         </div>
 
+        {{-- Save button --}}
         <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded mt-4">
             Save Preferences
         </button>
     </form>
 </div>
+
+{{-- JS to visually highlight selected color --}}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const options = document.querySelectorAll('#colorOptions label');
+
+        options.forEach(label => {
+            const input = label.querySelector('input');
+
+            input.addEventListener('change', () => {
+                options.forEach(lbl => lbl.classList.remove('border-purple-500'));
+                if (input.checked) {
+                    label.classList.add('border-purple-500');
+                }
+            });
+
+            // pre highlight check opcija uz page load
+            if (input.checked) {
+                label.classList.add('border-purple-500');
+            }
+        });
+    });
+</script>
 @endsection
