@@ -146,12 +146,6 @@
                 </div>
             </div>
 
-            <div class="bg-options-container">
-                <button class="bg-option" data-image="backgrounds/backgroundimage2.jpeg">Background 1</button>
-                <button class="bg-option" data-image="backgrounds/backgroundimage3.jpg">Background 2</button>
-                <button class="bg-option" data-image="backgrounds/backgroundimage4.jpeg">Background 3</button>
-            </div>
-
             <div class="tasks-section">
                 <h2>Your Tasks</h2>
                 <table>
