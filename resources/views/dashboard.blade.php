@@ -104,21 +104,6 @@
             margin: 2rem 0;
             text-align: center;
         }
-
-        .bg-option {
-            padding: 0.5rem 1rem;
-            background-color: #292f4c;
-            color: white;
-            border: none;
-            border-radius: 0.5rem;
-            margin: 0 0.5rem;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .bg-option:hover {
-            background-color: #3b425c;
-        }
     </style>
 </head>
 <body class="flex">
@@ -171,46 +156,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const buttons = document.querySelectorAll('.bg-option');
-
-            buttons.forEach(button => {
-                button.addEventListener('click', function () {
-                    const imagePath = this.getAttribute('data-image');
-
-                    fetch('/user-preference/store', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({ background_image: imagePath })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.message) {
-                            document.body.style.backgroundImage = `url(/${imagePath})`;
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error updating background:', error);
-                    });
-                });
-            });
-
-            fetch('/user-preference/get')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.background_image) {
-                        document.body.style.backgroundImage = `url(/${data.background_image})`;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching background preference:', error);
-                });
-        });
-    </script>
 </body>
 </html>
