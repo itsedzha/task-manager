@@ -9,5 +9,10 @@ class UserPreference extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'background_image'];
+    protected $fillable = [
+        'user_id',
+        'background_image',
+        'avatar_color',
+        'background_color',
+    ];
 }

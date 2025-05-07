@@ -26,26 +26,42 @@
             @endphp
 
             @foreach ($colors as $color)
-                <label class="cursor-pointer relative w-12 h-12 rounded-full border-4 transition-all duration-200"
-                       data-color="{{ $color }}">
-                    <input type="radio" name="background_color" value="{{ $color }}"
-                           class="absolute inset-0 opacity-0 cursor-pointer"
-                           {{ $current === $color ? 'checked' : '' }}>
-                    <div class="w-full h-full rounded-full" style="background-color: {{ $color }}"></div>
-                </label>
-            @endforeach
+    <label class="cursor-pointer relative w-12 h-12 rounded-full border-4 transition-all duration-200"
+           data-color="{{ $color }}">
+        <input type="radio"
+               name="background_color"
+               value="{{ $color }}"
+               class="absolute inset-0 opacity-0 cursor-pointer"
+               {{ $current === $color ? 'checked' : '' }}>
+        <div class="w-full h-full rounded-full" style="background-color: {{ $color }}"></div>
+    </label>
+@endforeach
         </div>
 
         {{-- Save button --}}
-        <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded mt-4">
-            Save Preferences
-        </button>
-    </form>
+<button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded mt-4">
+    Save Preferences
+</button>
+</form>
 </div>
-
-{{-- JS to visually highlight selected color --}}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        console.log("Script loaded");
+
+        fetch('/user-preference/get')
+            .then(response => response.json())
+            .then(data => {
+                console.log("Fetched preference:", data);
+
+                if (data.background_color) {
+                    document.body.style.backgroundColor = data.background_color;
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching background preference:', error);
+            });
+
+        // highlighto izvēlēto krāsu
         const options = document.querySelectorAll('#colorOptions label');
 
         options.forEach(label => {
@@ -58,11 +74,13 @@
                 }
             });
 
-            // pre highlight check opcija uz page load
+            // ja ir izvēlēta krāsa, pievieno border
             if (input.checked) {
                 label.classList.add('border-purple-500');
             }
         });
     });
 </script>
+
+
 @endsection

@@ -13,6 +13,7 @@ class UserPreferenceController extends Controller
         $request->validate([
             'background_image' => 'nullable|string',
             'avatar_color' => 'nullable|string',
+            'background_color' => 'nullable|string',
         ]);
     
         $user = Auth::user();
@@ -22,12 +23,12 @@ class UserPreferenceController extends Controller
             [
                 'background_image' => $request->background_image,
                 'avatar_color' => $request->avatar_color,
+                'background_color' => $request->background_color, 
             ]
         );
     
         return redirect()->route('settings')->with('success', 'Preferences updated successfully!');
     }
-    
     
     public function getPreference()
     {
@@ -37,7 +38,9 @@ class UserPreferenceController extends Controller
         return response()->json([
             'background_image' => $preference?->background_image,
             'avatar_color' => $preference?->avatar_color,
+            'background_color' => $preference?->background_color, 
         ]);
     }
+    
     
 }
