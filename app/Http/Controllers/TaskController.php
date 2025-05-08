@@ -103,7 +103,7 @@ class TaskController extends Controller
     {
         $task = Task::findOrFail($id);
     
-        if ($request->has('completed')) {
+        if ($request->has('completed') && !$request->isMethod('GET')) {
             $task->update(['completed' => $request->input('completed')]);
             return redirect()->route('tasks.index')->with('success', 'Task completion status updated!');
         }
@@ -115,7 +115,7 @@ class TaskController extends Controller
             'deadline' => 'nullable|date',
             'progress' => 'nullable|integer|min:0|max:100',
             'subtasks' => 'nullable|array',
-            'subtasks.*' => 'required|string|max:255',
+            'subtasks.*' => 'string|max:255',
         ]);
     
         $task->update([
@@ -126,15 +126,21 @@ class TaskController extends Controller
             'progress' => $validated['progress'] ?? $task->progress,
         ]);
     
-        if (!empty($validated['subtasks'])) {
-            $task->subtasks()->delete();
-    
+        $task->subtasks()->delete();
+        
+        if (isset($validated['subtasks']) && is_array($validated['subtasks'])) {
             foreach ($validated['subtasks'] as $subtaskTitle) {
-                $task->subtasks()->create(['title' => $subtaskTitle, 'completed' => false]);
+                if (!empty(trim($subtaskTitle))) {
+                    $task->subtasks()->create([
+                        'title' => $subtaskTitle, 
+                        'completed' => false
+                    ]);
+                }
             }
         }
     
-        return redirect()->route('tasks.index')->with('success', 'Task updated successfully!');
+        return redirect()->route('tasks.index')
+            ->with('success', 'Task "' . $validated['title'] . '" updated successfully!');
     }
     
     public function destroy($id)

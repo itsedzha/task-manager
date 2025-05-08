@@ -406,13 +406,21 @@
                     <span class="material-symbols-outlined trophy-icon mr-1">emoji_events</span>
                     {{ $task->points }}
                 </span>
-                <form action="{{ route('tasks.destroy', $task->id) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="text-red-500 hover:text-red-700">
-                        <span class="material-symbols-outlined">delete</span>
-                    </button>
-                </form>
+                <div class="flex space-x-3">
+                    <!-- edit poga -->
+                    <a href="{{ route('tasks.edit', $task->id) }}" class="text-blue-400 hover:text-blue-600" title="Edit Task">
+                        <span class="material-symbols-outlined">edit</span>
+                    </a>
+                    
+                    <!-- delete poga -->
+                    <form action="{{ route('tasks.destroy', $task->id) }}" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="text-red-500 hover:text-red-700" title="Delete Task">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    </form>
+                </div>
             </div>
             <form id="task-complete-{{ $task->id }}" action="{{ route('tasks.update', $task->id) }}" method="POST"
                 style="display: none;">
