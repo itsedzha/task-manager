@@ -301,33 +301,39 @@
 
 
 <div class="mt-12">
-    <h2 class="text-2xl font-semibold text-purple-400">Rewards</h2>
+    <h2 class="text-2xl font-semibold text-purple-400 mb-4">Rewards</h2>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
-        <div class="reward-card">
-            <span class="material-symbols-outlined text-purple-400 text-6xl">emoji_events</span>
+
+        <div class="rounded-lg p-6 text-center transition duration-300 
+            {{ $badge_5_tasks ? 'bg-green-700 text-white shadow-lg' : 'bg-[#292f4c] text-gray-400' }}">
+            <span class="material-symbols-outlined text-6xl mb-2">emoji_events</span>
             <p class="text-lg font-semibold mt-2">Task Master Badge</p>
             <p class="text-sm">Complete 5 tasks</p>
         </div>
-        <div class="reward-card">
-            <span class="material-symbols-outlined text-blue-400 text-6xl">star</span>
+
+        <div class="rounded-lg p-6 text-center transition duration-300 
+            {{ $badge_10_priority ? 'bg-green-700 text-white shadow-lg' : 'bg-[#292f4c] text-gray-400' }}">
+            <span class="material-symbols-outlined text-6xl mb-2">star</span>
             <p class="text-lg font-semibold mt-2">Productivity Star</p>
             <p class="text-sm">Complete 10 high-priority tasks</p>
         </div>
-        <div class="reward-card">
-            <span class="material-symbols-outlined text-green-400 text-6xl">target</span>
+
+        <div class="rounded-lg p-6 text-center transition duration-300 
+            {{ $badge_deadline ? 'bg-green-700 text-white shadow-lg' : 'bg-[#292f4c] text-gray-400' }}">
+            <span class="material-symbols-outlined text-6xl mb-2">target</span>
             <p class="text-lg font-semibold mt-2">Goal Crusher</p>
             <p class="text-sm">Complete all tasks before deadline</p>
         </div>
-        <div class="reward-card">
-            <span class="material-symbols-outlined text-yellow-400 text-6xl">workspace_premium</span>
+
+        <div class="rounded-lg p-6 text-center transition duration-300 
+            {{ $badge_20_total ? 'bg-green-700 text-white shadow-lg' : 'bg-[#292f4c] text-gray-400' }}">
+            <span class="material-symbols-outlined text-6xl mb-2">workspace_premium</span>
             <p class="text-lg font-semibold mt-2">Ultimate Achiever</p>
             <p class="text-sm">Complete 20 tasks</p>
         </div>
+
     </div>
 </div>
-
-
-
 
 
         <div class="mt-12">
@@ -420,7 +426,7 @@
 </div>
 
 
-<div class="mt-8 text-right">
+<div class="mt-8 text-left">
     <a href="{{ route('tasks.create') }}"
         class="inline-block px-6 py-2 bg-purple-500 text-white rounded hover:bg-purple-600">
         + Add Task

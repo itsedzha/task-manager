@@ -11,23 +11,43 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         $query = Task::where('user_id', auth()->id());
-
+    
         if ($request->has('search')) {
             $query->where(function ($subQuery) use ($request) {
                 $subQuery->where('title', 'like', '%' . $request->input('search') . '%')
                          ->orWhere('priority', 'like', '%' . $request->input('search') . '%');
             });
         }
-
+    
         $tasks = $query->paginate(10);
-
-        $totalTasks = Task::where('user_id', auth()->id())->count();
-        $completedTasks = Task::where('user_id', auth()->id())->where('completed', true)->count();
+    
+        $allTasks = Task::where('user_id', auth()->id())->get();
+        $totalTasks = $allTasks->count();
+        $completedTasks = $allTasks->where('completed', true)->count();
+        $highPriorityTasks = $allTasks->where('priority', 'high')->count();
+        $allBeforeDeadline = $allTasks->every(fn($t) => $t->deadline && $t->completed && $t->deadline >= $t->updated_at);
+    
+        $badge_5_tasks = $completedTasks >= 5;
+        $badge_10_priority = $highPriorityTasks >= 10;
+        $badge_deadline = $completedTasks > 0 && $allBeforeDeadline;
+        $badge_20_total = $completedTasks >= 20;
+    
         $totalPoints = $completedTasks * 10;
         $progress = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
-
-        return view('tasks.index', compact('tasks', 'totalTasks', 'completedTasks', 'totalPoints', 'progress'));
+    
+        return view('tasks.index', compact(
+            'tasks',
+            'totalTasks',
+            'completedTasks',
+            'totalPoints',
+            'progress',
+            'badge_5_tasks',
+            'badge_10_priority',
+            'badge_deadline',
+            'badge_20_total'
+        ));
     }
+    
 
     public function create()
     {

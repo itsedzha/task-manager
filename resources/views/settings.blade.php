@@ -21,7 +21,7 @@
         {{-- Color options rendered from array --}}
         <div class="flex space-x-4" id="colorOptions">
             @php
-                $colors = ['#1e2138', '#292f4c', '#181b34', '#2d3748', '#4a5568'];
+                $colors = ['#181b34', '#3d3656', '#675378', '#94719a', '#eeedff', '#f2e9e1', '#f0c6c6', '#f8b5b5', '#f7a3a3', '#f78d8d'];
                 $current = auth()->user()->preference->background_color ?? '';
             @endphp
 
