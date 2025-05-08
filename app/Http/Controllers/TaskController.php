@@ -7,6 +7,7 @@ use App\Models\Task;
 use App\Models\Badge;
 use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
+use App\Services\QuoteService;
 
 class TaskController extends Controller
 {
@@ -52,6 +53,8 @@ class TaskController extends Controller
             ->where('read', false)
             ->orderBy('created_at', 'desc')
             ->get();
+        
+        $dailyQuote = QuoteService::getDailyQuote();
 
         return view('tasks.index', compact(
             'tasks',
@@ -60,7 +63,8 @@ class TaskController extends Controller
             'totalPoints',
             'progress',
             'badge',
-            'notifications'
+            'notifications',
+            'dailyQuote'
         ));
     }
     

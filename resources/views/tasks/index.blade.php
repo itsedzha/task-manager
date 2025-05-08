@@ -365,6 +365,17 @@
 @endif
 
 
+        <!-- motivācija quote -->
+        <div class="mt-8 bg-gradient-to-r from-indigo-900 to-purple-900 p-6 rounded-lg shadow-lg">
+            <div class="flex items-start">
+                <span class="material-symbols-outlined text-yellow-400 text-3xl mr-4">format_quote</span>
+                <div>
+                    <p class="text-white text-lg italic">"{{ $dailyQuote }}"</p>
+                    <p class="text-gray-300 text-sm mt-2">Daily motivation</p>
+                </div>
+            </div>
+        </div>
+
         <div class="mt-12">
     <h2 class="text-2xl font-semibold text-purple-400">Your Tasks</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
