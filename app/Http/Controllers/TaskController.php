@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Task;
+use App\Models\Badge;
 use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Task::where('user_id', auth()->id());
+        $user = auth()->user();
+    
+        $query = Task::where('user_id', $user->id);
     
         if ($request->has('search')) {
             $query->where(function ($subQuery) use ($request) {
@@ -21,19 +24,20 @@ class TaskController extends Controller
     
         $tasks = $query->paginate(10);
     
-        $allTasks = Task::where('user_id', auth()->id())->get();
+        $allTasks = Task::where('user_id', $user->id)->get();
         $totalTasks = $allTasks->count();
         $completedTasks = $allTasks->where('completed', true)->count();
-        $highPriorityTasks = $allTasks->where('priority', 'high')->count();
-        $allBeforeDeadline = $allTasks->every(fn($t) => $t->deadline && $t->completed && $t->deadline >= $t->updated_at);
+        $highPriorityCompleted = $allTasks->where('priority', 'high')->where('completed', true)->count();
     
-        $badge_5_tasks = $completedTasks >= 5;
-        $badge_10_priority = $highPriorityTasks >= 10;
-        $badge_deadline = $completedTasks > 0 && $allBeforeDeadline;
-        $badge_20_total = $completedTasks >= 20;
+        $onTimeCompleted = $allTasks->where('completed', true)
+            ->filter(fn($task) => $task->deadline && $task->updated_at <= $task->deadline)
+            ->count();
     
         $totalPoints = $completedTasks * 10;
         $progress = $totalTasks > 0 ? round(($completedTasks / $totalTasks) * 100) : 0;
+    
+        // atgriež badge autentificetajam user no DB
+        $badge = $user->badge;
     
         return view('tasks.index', compact(
             'tasks',
@@ -41,12 +45,11 @@ class TaskController extends Controller
             'completedTasks',
             'totalPoints',
             'progress',
-            'badge_5_tasks',
-            'badge_10_priority',
-            'badge_deadline',
-            'badge_20_total'
+            'badge'
         ));
     }
+    
+    
     
 
     public function create()

@@ -300,33 +300,34 @@
 
 
 
+@if ($badge)
 <div class="mt-12">
     <h2 class="text-2xl font-semibold text-purple-400 mb-4">Rewards</h2>
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
 
-        <div class="rounded-lg p-6 text-center transition duration-300 
-            {{ $badge_5_tasks ? 'bg-green-700 text-white shadow-lg' : 'bg-[#292f4c] text-gray-400' }}">
+        <div class="rounded-lg p-6 text-center min-h-[180px] transition duration-300 
+            {{ $badge->badge_5_tasks ? 'bg-green-700 text-white shadow-lg' : 'bg-[#292f4c] text-gray-400' }}">
             <span class="material-symbols-outlined text-6xl mb-2">emoji_events</span>
             <p class="text-lg font-semibold mt-2">Task Master Badge</p>
             <p class="text-sm">Complete 5 tasks</p>
         </div>
 
-        <div class="rounded-lg p-6 text-center transition duration-300 
-            {{ $badge_10_priority ? 'bg-green-700 text-white shadow-lg' : 'bg-[#292f4c] text-gray-400' }}">
+        <div class="rounded-lg p-6 text-center min-h-[180px] transition duration-300 
+            {{ $badge->badge_10_priority ? 'bg-green-700 text-white shadow-lg' : 'bg-[#292f4c] text-gray-400' }}">
             <span class="material-symbols-outlined text-6xl mb-2">star</span>
             <p class="text-lg font-semibold mt-2">Productivity Star</p>
             <p class="text-sm">Complete 10 high-priority tasks</p>
         </div>
 
-        <div class="rounded-lg p-6 text-center transition duration-300 
-            {{ $badge_deadline ? 'bg-green-700 text-white shadow-lg' : 'bg-[#292f4c] text-gray-400' }}">
+        <div class="rounded-lg p-6 text-center min-h-[180px] transition duration-300 
+            {{ $badge->badge_deadline ? 'bg-green-700 text-white shadow-lg' : 'bg-[#292f4c] text-gray-400' }}">
             <span class="material-symbols-outlined text-6xl mb-2">target</span>
             <p class="text-lg font-semibold mt-2">Goal Crusher</p>
             <p class="text-sm">Complete all tasks before deadline</p>
         </div>
 
-        <div class="rounded-lg p-6 text-center transition duration-300 
-            {{ $badge_20_total ? 'bg-green-700 text-white shadow-lg' : 'bg-[#292f4c] text-gray-400' }}">
+        <div class="rounded-lg p-6 text-center min-h-[180px] transition duration-300 
+            {{ $badge->badge_20_total ? 'bg-green-700 text-white shadow-lg' : 'bg-[#292f4c] text-gray-400' }}">
             <span class="material-symbols-outlined text-6xl mb-2">workspace_premium</span>
             <p class="text-lg font-semibold mt-2">Ultimate Achiever</p>
             <p class="text-sm">Complete 20 tasks</p>
@@ -334,6 +335,7 @@
 
     </div>
 </div>
+@endif
 
 
         <div class="mt-12">

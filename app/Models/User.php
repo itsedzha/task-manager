@@ -49,4 +49,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Task::class);
     }
+
+    public function badge()
+    {
+        return $this->hasOne(UserBadge::class);
+    }
+
 }
