@@ -22,6 +22,13 @@ class TaskController extends Controller
                          ->orWhere('priority', 'like', '%' . $request->input('search') . '%');
             });
         }
+        
+        $query->orderByRaw("CASE 
+            WHEN priority = 'high' THEN 1 
+            WHEN priority = 'medium' THEN 2 
+            WHEN priority = 'low' THEN 3 
+            ELSE 4 
+        END");
     
         $tasks = $query->paginate(10);
     
