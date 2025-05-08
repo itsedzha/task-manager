@@ -133,6 +133,15 @@
                         <input type="date" name="deadline" id="deadline">
                     </div>
                 </div>
+                
+                <div>
+                    <label for="progress">Progress (0-100%)</label>
+                    <div class="flex items-center space-x-4">
+                        <input type="range" name="progress" id="progress" min="0" max="100" value="0" 
+                            class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                        <span id="progress-value" class="text-white font-medium">0%</span>
+                    </div>
+                </div>
 
                 <div>
                     <label>Subtasks</label>
@@ -165,6 +174,13 @@
                 this.parentElement.remove();
             });
             document.querySelector('#subtasks').appendChild(template);
+        });
+
+        const progressSlider = document.getElementById('progress');
+        const progressValue = document.getElementById('progress-value');
+
+        progressSlider.addEventListener('input', function() {
+            progressValue.textContent = this.value + '%';
         });
     </script>
 </body>

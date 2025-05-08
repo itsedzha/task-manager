@@ -428,6 +428,16 @@
             </div>
             @endif
 
+            <div class="mt-3">
+                <div class="flex justify-between text-xs text-gray-400 mb-1">
+                    <span>Progress</span>
+                    <span>{{ $task->progress }}%</span>
+                </div>
+                <div class="w-full bg-gray-700 rounded-full h-2.5">
+                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: {{ $task->progress }}%"></div>
+                </div>
+            </div>
+
             <div class="flex items-center justify-between mt-4">
                 <span class="flex items-center">
                     <span class="material-symbols-outlined trophy-icon mr-1">emoji_events</span>

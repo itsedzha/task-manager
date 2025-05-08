@@ -159,6 +159,18 @@
                         @enderror
                     </div>
                 </div>
+                
+                <div>
+                    <label for="progress">Progress (0-100%)</label>
+                    <div class="flex items-center space-x-4">
+                        <input type="range" name="progress" id="progress" min="0" max="100" value="{{ $task->progress }}" 
+                            class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                        <span id="progress-value" class="text-white font-medium">{{ $task->progress }}%</span>
+                    </div>
+                    @error('progress')
+                        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    @enderror
+                </div>
 
                 <div>
                     <label>Subtasks</label>
@@ -204,6 +216,13 @@
             button.addEventListener('click', function () {
                 this.parentElement.remove();
             });
+        });
+        
+        const progressSlider = document.getElementById('progress');
+        const progressValue = document.getElementById('progress-value');
+
+        progressSlider.addEventListener('input', function() {
+            progressValue.textContent = this.value + '%';
         });
     </script>
 </body>

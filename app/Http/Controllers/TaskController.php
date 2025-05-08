@@ -72,15 +72,21 @@ class TaskController extends Controller
             'description' => 'nullable|string',
             'priority' => 'required|in:low,medium,high',
             'deadline' => 'nullable|date',
+            'progress' => 'integer|min:0|max:100',
             'subtasks' => 'array',
             'subtasks.*' => 'nullable|string|max:255',
         ]);
+
+        $progress = $validated['progress'] ?? 0;
+        $completed = $progress == 100;
 
         $task = Task::create([
             'title' => $validated['title'],
             'description' => $validated['description'] ?? null,
             'priority' => $validated['priority'],
             'deadline' => $validated['deadline'] ?? null,
+            'progress' => $progress,
+            'completed' => $completed,
             'user_id' => auth()->id(), 
         ]);
 
@@ -126,12 +132,16 @@ class TaskController extends Controller
             'subtasks.*' => 'string|max:255',
         ]);
     
+        $progress = $validated['progress'] ?? $task->progress;
+        $completed = $progress == 100;
+        
         $task->update([
             'title' => $validated['title'],
             'description' => $validated['description'],
             'priority' => $validated['priority'],
             'deadline' => $validated['deadline'],
-            'progress' => $validated['progress'] ?? $task->progress,
+            'progress' => $progress,
+            'completed' => $completed,
         ]);
     
         $task->subtasks()->delete();
