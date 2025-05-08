@@ -21,8 +21,9 @@
             border-radius: 1rem;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.6);
             padding: 2rem;
-            max-width: 600px;
+            max-width: 720px;
             margin: 5rem auto;
+            width: 90%; 
         }
 
         label {
@@ -36,13 +37,13 @@
         textarea,
         select {
             width: 100%;
-            padding: 1rem; 
+            padding: 1.1rem 1.25rem !important;
             border-radius: 0.75rem;
-            background: #1f2436; 
-            color: #E5E7EB !important; 
+            background: #1f2436;
+            color: #E5E7EB !important;
             border: 2px solid transparent;
-            margin-bottom: 1.5rem;
-            font-size: 1rem;
+            margin-bottom: 1.75rem; 
+            font-size: 1.05rem;
             font-weight: 500;
             transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
@@ -94,43 +95,57 @@
 
 <body>
     <div class="form-container">
-        <h1 class="text-3xl text-center font-bold text-white mb-6">Create New Task</h1>
+        <h1 class="text-3xl text-center font-bold text-white mb-8">Create New Task</h1>
 
         <form action="{{ route('tasks.store') }}" method="POST">
             @csrf
 
-            <label for="title">Title</label>
-            <input type="text" name="title" id="title" required placeholder="Enter task title">
+            <div class="space-y-4">
+                <div>
+                    <label for="title">Title</label>
+                    <input type="text" name="title" id="title" required placeholder="Enter task title">
+                </div>
 
-            <label for="description">Description</label>
-            <textarea name="description" id="description" rows="3" placeholder="Write a brief description"></textarea>
+                <div>
+                    <label for="description">Description</label>
+                    <textarea name="description" id="description" rows="4" placeholder="Write a brief description"></textarea>
+                </div>
 
-            <label for="priority">Priority</label>
-            <select name="priority" id="priority">
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
-            </select>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="priority">Priority</label>
+                        <select name="priority" id="priority">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
 
-            <label for="deadline">Deadline</label>
-            <input type="date" name="deadline" id="deadline">
+                    <div>
+                        <label for="deadline">Deadline</label>
+                        <input type="date" name="deadline" id="deadline">
+                    </div>
+                </div>
 
-            <div id="subtasks">
-                <label>Subtasks</label>
-                <div class="flex items-center space-x-2 mt-2">
-                    <input type="text" name="subtasks[]" placeholder="Add a subtask">
-                    <button type="button" class="add-subtask">+</button>
+                <div>
+                    <label>Subtasks</label>
+                    <div id="subtasks" class="space-y-2">
+                        <div class="flex items-center gap-2">
+                            <input type="text" name="subtasks[]" placeholder="Add a subtask">
+                            <button type="button" class="add-subtask">+</button>
+                        </div>
+                    </div>
+
+                    <template id="subtask-template">
+                        <div class="flex items-center gap-2 mt-2">
+                            <input type="text" name="subtasks[]" placeholder="Add a subtask">
+                            <button type="button" class="remove-subtask">x</button>
+                        </div>
+                    </template>
                 </div>
             </div>
 
-            <template id="subtask-template">
-                <div class="flex items-center space-x-2 mt-2">
-                    <input type="text" name="subtasks[]" placeholder="Add a subtask">
-                    <button type="button" class="remove-subtask">x</button>
-                </div>
-            </template>
-
-            <div class="text-center mt-6">
+            <div class="text-center mt-8">
                 <button type="submit" class="submit-btn">Create Task</button>
             </div>
         </form>
@@ -140,11 +155,12 @@
         document.querySelector('.add-subtask').addEventListener('click', function () {
             const template = document.querySelector('#subtask-template').content.cloneNode(true);
             template.querySelector('.remove-subtask').addEventListener('click', function () {
-                this.parentNode.remove();
+                this.parentElement.remove();
             });
             document.querySelector('#subtasks').appendChild(template);
         });
     </script>
 </body>
+
 
 </html>
