@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Task;
 use App\Models\Badge;
+use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
@@ -38,14 +39,21 @@ class TaskController extends Controller
     
         // atgriež badge autentificetajam user no DB
         $badge = $user->badge;
-    
+        
+        // saņem neredzētos uzdevumu termiņu paziņojumus
+        $notifications = Notification::where('user_id', $user->id)
+            ->where('read', false)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
         return view('tasks.index', compact(
             'tasks',
             'totalTasks',
             'completedTasks',
             'totalPoints',
             'progress',
-            'badge'
+            'badge',
+            'notifications'
         ));
     }
     

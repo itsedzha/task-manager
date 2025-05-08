@@ -265,6 +265,33 @@
         </div>
         @endif
 
+        <!-- deadline notif. -->
+        @if(isset($notifications) && $notifications->count() > 0)
+        <div class="bg-indigo-900 border-l-4 border-yellow-400 rounded-md p-4 mt-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <span class="material-symbols-outlined text-yellow-400">alarm</span>
+                </div>
+                <div class="ml-3">
+                    <h3 class="text-lg font-medium text-indigo-100">Deadline Reminders</h3>
+                    <div class="mt-2 text-sm text-indigo-200 space-y-1">
+                        <ul class="list-disc pl-5 space-y-1">
+                            @foreach($notifications as $notification)
+                                <li>
+                                    {{ $notification->message }}
+                                    <a href="{{ route('tasks.edit', $notification->task_id) }}" 
+                                       class="text-yellow-300 hover:text-yellow-200 ml-2 underline">
+                                        View Task
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endif
+
         <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-8">
     <!-- total tasks -->
     <div class="dashboard-card">
