@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Task</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
 
@@ -95,7 +96,13 @@
 
 <body>
     <div class="form-container">
-        <h1 class="text-3xl text-center font-bold text-white mb-8">Create New Task</h1>
+        
+        <div class="flex items-center mb-8">
+            <a href="/tasks" class="text-white hover:text-purple-400 transition mr-4" title="Back to tasks">
+                <span class="material-symbols-outlined text-3xl">home</span>
+            </a>
+            <h1 class="text-2xl font-bold text-white">Create New Task</h1>
+        </div>
 
         <form action="{{ route('tasks.store') }}" method="POST">
             @csrf
