@@ -20,6 +20,15 @@
             Settings
         </a>
     </li>
+    <li>
+        <form method="POST" action="{{ route('logout') }}" id="logout-form">
+            @csrf
+            <a href="javascript:void(0)" onclick="document.getElementById('logout-form').submit();" class="flex items-center gap-2 hover:text-red-400">
+                <span class="material-symbols-outlined text-xl">logout</span>
+                Log Out
+            </a>
+        </form>
+    </li>
 </ul>
     </div>
 </div>
